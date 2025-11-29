@@ -1,0 +1,732 @@
+/* Postavljanje osnovnog stila i resetovanje margina */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: #000;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Postavljanje tela stranice */
+body, html {
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Top Bar */
+#topBar {
+    width: 100%;               /* Zauzima celu širinu */
+    height: 50px;              /* Visina top bar-a */
+    color: white;              /* Tekst u beloj boji */
+    display: flex;             /* Koristi flexbox za raspored */
+    align-items: center;       /* Vertikalno poravnavanje teksta */
+    justify-content: space-between;
+    position: fixed;           /* Fiksiraj top bar na vrhu stranice */
+    top: 0;                    /* Na vrhu ekrana */
+    left: 0;                   /* Leva ivica */
+    z-index: 99;             /* Osiguraj da bude iznad ostalih elemenata */
+    border-bottom: 1px solid #d9dadb;
+    padding-right: 10%;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 200px;
+    padding: 10px;
+}
+
+.brand p{
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.brand svg {
+    height: 30px;
+}
+
+.brand svg path {
+    fill: var(--pure);
+}
+
+.userFunds{
+    display: flex;
+}
+
+.userFunds-details{
+    margin-left: 20px;
+    text-align: right;
+}
+
+.userFunds-name{
+    font-size: 12px;
+    color: #aaa;
+}
+
+.userFunds-number{
+    font-weight: bolder;
+}
+
+/* Glavni kontejner sa menijem i sadržajem */
+#mainContainer {
+    display: flex;
+    height: 100%;
+    margin-top: 50px; /* Dodajemo prostor ispod top bar-a */
+}
+
+/* Lev meni koji je prikvačen za levu stranu */
+#sideMenu {
+    width: 200px;
+    color: #000;
+    position: fixed;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-right: 5px solid #d9dadb;
+    padding-left: 10px;
+    background-color: #fff;
+    z-index: 9999;
+}
+
+/* Meni stavke */
+#sideMenu .menu ul {
+    list-style: none;
+    padding: 0;
+    border-bottom: 1px solid #d9dadb;
+}
+
+#sideMenu .menu ul li {
+    margin: 20px 0;
+    padding: 2px 0;
+    padding-left: 0;
+    display: block;
+}
+
+#sideMenu .menu ul li:hover {
+    border-bottom: 1px solid #d9dadb;
+}
+
+/* Dashboard link na dnu */
+#sideMenu .dashboard-link {
+    text-decoration: none;
+    color: #333;
+    position: absolute;
+    bottom: 80px;
+    transition: transform 0.3s ease;
+}
+#sideMenu .dashboard-link:hover {
+    transform: translateX(-7px);
+}
+
+#contentArea {
+    margin-left: 200px; 
+    display: flex;
+    flex-direction: row; 
+    height: 100vh;
+    width: 100%;
+    background-color: #f8faf7;
+}
+
+#cryptoTableContainer {
+    flex-basis: 30%;
+    height: 100%;
+    border-right: 1px solid #d9dadb;
+    overflow-y: auto;
+    font-size: 14px;
+    background-color: #f8faf7;
+    padding-bottom: 70px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 6px; /* razmak između redova */
+    font-family: Arial, sans-serif;
+}
+
+th {
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 14px;
+    color: #333;
+    background: #f7f8f9;
+    border-bottom: 2px solid #e4e5e7;
+}
+
+tr {
+    background: #ffffff;
+    transition: background 0.25s ease, transform 0.15s ease;
+}
+
+td {
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #222;
+    border-top: 1px solid #ececec;
+    border-bottom: 1px solid #ececec;
+    cursor: pointer;
+}
+
+/* Glatko podizanje pri hoveru */
+tr:hover {
+    background: #f2f7ff;
+    transform: translateX(4px);
+}
+
+/* Zaokruživanje ivica redova */
+tr td:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+tr td:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+/* Hover efekat za ćelije */
+td:hover {
+    color: #0056d6;
+}
+
+/* Lepe tanke linije */
+table thead tr th:first-child {
+    border-top-left-radius: 6px;
+}
+
+table thead tr th:last-child {
+    border-top-right-radius: 6px;
+}
+
+
+/* Roditeljski div za oba elementa */
+#cryptoChartContainer {
+    display: flex;          /* Flexbox za horizontalni raspored */
+    width: 100%;            /* Zauzima celu širinu */
+    height: 100%;           /* Zauzima celu visinu */
+    background-color: #f8faf7;
+}
+
+/* Div za TradingView chart */
+#tradingview-widget-container {
+    width: 80%;             /* TradingView zauzima 80% širine */
+    height: 70%;            /* TradingView zauzima 70% visine */
+}
+
+/* Div za chart-deal (sused TradingView-a) */
+#chart-deal, #chart-order {
+    width: 20%;             /* Chart deal zauzima 20% širine */
+    height: 100%;           /* Zauzima celu visinu roditeljskog elementa */
+    border-left: 1px solid #d9dadb;
+    background-color: #f8faf7;
+}
+
+.deal-tabs{
+    background-color: #fff;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #d9dadb;
+}
+
+.deal-tabs p{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#chart-position {
+    width: 100%;
+    height: 36%;
+    overflow-y: auto;       /* vertikalni scroll */
+    overflow-x: hidden;     /* da ne bude horizontalni scroll */
+    scrollbar-width: thin;  /* lepši scroll za Firefox */
+}
+
+#chart-position::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chart-position::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#chart-position::-webkit-scrollbar-thumb {
+    background: #b9b9b9;
+    border-radius: 4px;
+}
+
+#chart-position::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+
+#tradingview-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.buy-sell-cells{
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
+}
+
+.buy-sell-cell{
+    background-color: #fff;
+    border: 1px solid #d9dadb;
+    border-radius: 5px;
+    padding: 10px;
+    width: 40%;
+    cursor: pointer;
+}
+
+.buy-sell-cell.active.buy {
+    background: rgba(30, 126, 52, 0.6);
+    color: white;
+}
+
+.buy-sell-cell.active.sell {
+    background: rgba(220, 53, 69, 0.6);
+    color: white;
+}
+
+
+.buy-sell-text{
+    font-size: 14px;
+    color: #d9dadb;
+}
+
+.buy-sell-size{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 20px 0px 20px;
+    align-items: center;
+}
+
+#size-number{
+    width: 100px;
+    height: 25px;
+    padding: 3px
+}
+
+.buy-sell{
+    padding-bottom: 20px;
+    border-bottom: 1px solid #d9dadb;
+}
+
+.placing{
+    background-color: #fff;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #aaa;
+}
+
+.deal-placing{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    padding-bottom: 0px;
+}
+
+.deal-placing p:first-child{
+    font-size: 12px;
+    color:#aaa;
+}
+
+.deal-placing p:last-child{
+    font-size: 14px;
+}
+
+.place-deal-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#place-deal-button, #place-order-button {
+    background-color: #1e7e34;
+    width: 80%;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    padding: 4px 0px 4px 0px;
+}
+
+#place-deal-button:hover {
+    background-color: #28a745;
+}
+
+#positionsOverlay, #historyOverlay, #ordersOverlay {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+}
+
+#positionsOverlay .container, #historyOverlay .container, #ordersOverlay .container {
+    width: 70%;
+    height: 100%;
+    border-right: 1px solid #d9dadb;
+    overflow-y: auto;
+    font-size: 14px;
+    background-color: #fff;
+    padding:0 0 100px 0; 
+}
+
+.total-profit-loss{
+    float: right;
+    padding: 10px 37px;
+}
+
+.profit-total{
+    font-weight: 700;
+}
+
+.deal-tabs {
+    display: flex;
+    gap: 20px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.deal-tabs p {
+    padding: 8px 15px;
+}
+
+.active-tab {
+    border-bottom: 2px solid #1e7e34;
+    padding-bottom: 0;
+}
+
+.tab-content {
+    display: none;
+}
+
+.active-content {
+    display: block;
+}
+
+.place-deal-error {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgba(220, 53, 69, 0.1);
+    color: rgba(220, 53, 69, 1);
+    font-weight: 500;
+    font-size: 14px;
+    display: none;
+}
+
+.sell-btn {
+    background-color: #e74c3c;          /* lepa moderna crvena */
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 4px;
+
+    cursor: pointer;
+    transition: 0.25s ease;
+
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.sell-btn:hover {
+    background-color: #c0392b;          /* tamnija crvena na hover */
+    transform: translateY(-1px);        /* lagani lift efekat */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.sell-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.sell-btn:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ===== EMPTY STATE (No Deals Found) ===== */
+.empty-state {
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    padding: 20px;
+
+    color: #6b6f76;
+    background: #fafbfc;
+    border-radius: 8px;
+
+    border: 1px solid #e2e4e7;
+}
+
+/* Ikonica */
+.empty-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    opacity: 0.7;
+}
+
+/* Naslov */
+.empty-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #2d2d2d;
+}
+
+/* Podnaslov */
+.empty-subtitle {
+    font-size: 14px;
+    color: #7b7f86;
+}
+
+/* Error varijanta */
+.empty-state.error {
+    background: #fff5f5;
+    border: 1px solid #ffcccc;
+}
+
+.empty-state.error .empty-title {
+    color: #d93025;
+}
+
+.hidden, .hidden-desk{
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .hidden-desk{
+        display: block;
+    }
+
+    #topBar {
+        padding: 10px 15px;
+    }
+
+    /* Hide side menu for mobile */
+    #sideMenu {
+        width: 200px; /* Veličina menija */
+        color: #000;
+        position: fixed; /* Prikvačen za levo */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        border-right: none;
+        padding-left: 10px;
+        background-color: #fff;
+        z-index: 9999;
+        top: 0; /* Dodato za poravnavanje sa vrhom */
+        left: -200px; /* Meni je skriven sa leve strane */
+        transition: left 0.3s ease; /* Animacija pri otvaranju/zatvaranju */
+    }
+
+    /* Kada se meni otvori */
+    #sideMenu.open {
+        left: 0; /* Pomera meni da se vidi */
+    }
+
+    #sideMenu .menu ul:first-child {
+        list-style: none;
+        padding-top: 60px;
+        border-bottom: 1px solid #d9dadb;
+    }
+
+    /* Linkovi u meniju */
+    #sideMenu a {
+        color: #333;
+        text-decoration: none;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Hover efekat na linkovima */
+    #sideMenu a:hover {
+        background-color: #f4f4f4; /* Svetlija pozadina pri hover-u */
+    }
+
+
+    #hamburgerMenu {
+        display: block;
+        font-size: 30px;
+        color: #000;
+        cursor: pointer;
+    }
+
+    /* User Funds in TopBar */
+    #topBar .userFunds {
+        display: none;
+    }
+
+    /* Content and tables adjustments */
+    #cryptoTableContainer,
+    #forexTableContainer,
+    #stocksTableContainer {
+        width: 100%;
+        padding: 20px;
+        display: none;  /* Hide tables initially */
+    }
+
+    #cryptoChartContainer,
+    #positionsOverlay,
+    #historyOverlay,
+    #ordersOverlay {
+        width: 100%;
+        padding: 10px;
+        display: none;  /* Hide these overlays initially */
+    }
+
+    /* Make chart and tables responsive */
+    #cryptoTableContainer, #forexTableContainer, #stocksTableContainer {
+        display: block;
+    }
+
+    #chart-deal, #chart-order{
+        padding-bottom: 20px;
+    }
+
+    /* Make the tabs take full width */
+    .tab-deal,
+    .tab-order {
+        width: 50%;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .active-tab {
+        background-color: #333;
+        color: #fff;
+    }
+
+    /* For the active content (deal or order) */
+    .tab-content {
+        display: none;
+    }
+
+    .active-content {
+        display: block;
+    }
+
+    .brand{
+        display: none;
+    }
+
+    #contentArea{
+        margin: 0;
+    }
+
+    #cryptoTableContainer{
+        flex-basis: 100%;
+    }
+
+    #tradingview-widget-container{
+        width:100%;
+    }
+
+    #cryptoChartContainer{
+        display: flex;
+        flex-direction: column;
+    }
+
+    #chart-deal, #chart-order {
+        width: 100%;
+        height: 100%;
+        border-left: 1px solid #d9dadb;
+        background-color: #f8faf7;
+    }
+
+    body{
+        overflow: scroll;
+    }
+
+    .pos-none{
+        display: none;
+    }
+
+    .container{
+        width: 100%!important;
+    }
+
+    #tradingview-chart {
+        width: 100% !important;
+        height: 500px !important;
+        margin-bottom: 10px;
+    }
+
+    #topBar{
+        z-index: 99999;
+        background-color: #fff;
+    }
+
+    #sideMenu .menu ul li {
+        padding: 5px;
+    }
+
+    #profileDropdown {
+        position: absolute;
+        top: 55px; /* Pozicionira dropdown na 70px od vrha */
+        right: 15px; /* Pozicionira ga sa desne strane */
+        width: 250px; /* Širina dropdown menija */
+        background-color: #fff; /* Pozadina menija */
+        color: #333; /* Boja teksta */
+        padding: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Senka za bolji izgled */
+        border-radius: 8px; /* Zaokruživanje ivica */
+        z-index: 10000; /* Podiže dropdown iznad drugih elemenata */
+        transition: opacity 0.3s ease-in-out; /* Prelaz za pokazivanje */
+    }
+
+    #profileDropdown.show {
+        display: block; /* Kada je prikazan */
+        opacity: 1; /* Vidljiv sa efektom */
+    }
+
+    #profileDropdown p {
+        margin: 10px 0; /* Razmak između stavki u dropdown meniju */
+        font-size: 14px;
+    }
+
+    #profileDropdown p {
+        margin: 0; /* Uklanja marginu, samo padding za prostor */
+        padding: 10px; /* Unutrašnji razmak između teksta i ivica */
+        font-size: 14px; /* Veličina fonta */
+        color: #333; /* Boja teksta */
+        border-bottom: 1px solid #eee; /* Razmak između redova (bordura) */
+        display: flex; /* Koristimo flex za bolje poravnavanje */
+        justify-content: space-between; /* Razdvaja ime i vrednost */
+        align-items: center; /* Vertikalno centriranje sadržaja */
+    }
+
+    #profileDropdown p:last-child {
+        border-bottom: none; /* Poslednji red nema donju borduru */
+    }
+
+    #profileDropdown p span {
+        font-weight: 600; /* Za stavke sa nazivima kao što su "Funds", "Profit/Loss", koristi bold */
+    }
+
+
+}
+

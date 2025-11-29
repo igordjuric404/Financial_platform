@@ -1,0 +1,1161 @@
+body {
+    font-family: 'Proxima Nova', sans-serif;
+    background: #fff;
+    color: #333
+
+}
+
+.main-logo {
+    width: 120px;
+    margin-left: 50px;
+}
+
+nav {
+    border-bottom: .1px solid #ccc;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-wrapper ul.nav-list {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+}
+
+.nav-wrapper ul.nav-list li {
+    margin-left: 50px;
+    padding: 15px 0;
+    position: relative;
+    font-size: 0.875rem;
+    text-decoration: #333;
+}
+
+.nav-wrapper ul.nav-list li a {
+    color: var(--pure);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-wrapper ul.nav-list li a:hover {
+    border-bottom: 3px solid #3987CC;
+}
+
+.nav-wrapper ul.nav-list li a.active {
+    border-bottom: 3px solid #3987CC !important;
+}
+
+
+main section.header {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    text-align: left;
+    padding-top: 160px;
+    
+}
+
+main section.header h1 {
+    font-size: 36px;
+    font-weight: 100;
+    text-transform: capitalize;
+    margin-bottom: 20px;
+}
+
+main section.header h4 {
+    font-size: 18px;
+    font-weight: 100;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+nav ul.dropdown-list {
+    list-style-type: none;
+    display: block;
+    background: #fff;
+    padding: 6px 16px;
+    position: absolute;
+    width: max-content;
+    z-index: 9999;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+.nav-wrapper ul.dropdown-list li {
+    margin-left: 0;
+    padding: 8px 0;
+}
+
+
+.nav-wrapper ul.nav-list li a.become-partner {
+    color: #333;
+    font-weight: bolder;
+}
+
+
+.nav-wrapper ul.dropdown-list  li a {
+    display: block;
+    color: var(--dark);
+    font-size: 0.855rem;
+    margin-left: 10px;
+} 
+
+.nav-wrapper ul.nav-list li:hover .dropdown-list {
+    opacity: 1;
+    pointer-events: auto;
+    animation: moveUp .5s ease-in-out forwards;
+}
+
+@keyframes moveUp {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(20px); 
+    }
+}
+
+.hamburger {
+    display: none;
+}
+
+.menu-container {
+    display: none;
+}
+
+.mobile .hamburger {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    cursor: pointer;
+    margin-top: 5px;
+    
+}
+
+.mobile .hamburger span {
+    background-color: #333;
+    width: 28px;
+    height: 2px;
+    margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+    .container {
+    margin-left: 30px;
+}
+
+.menu-container {
+    display: flex;
+    align-items: center;
+}
+
+.menu-text {
+    margin-left: 15px; /* Adjust margin as needed */
+    font-size: 16px; /* Adjust font size as needed */
+}
+
+}
+
+.mobile ul.nav-list {
+    background: #fff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 80px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all .3s ease-in-out;
+}
+
+.hamburger, .brand {
+    z-index: 9999;
+}
+
+.mobile ul.nav-list.open {
+    opacity: 1;
+    pointer-events: auto; 
+    z-index: 9998;
+}
+
+.mobile .hamburger span {
+    transform-origin: left;
+    transition: all .3s ease-in-out;
+}
+
+.mobile ul.nav-list li a {
+    font-size: 20px;
+}
+
+.mobile ul.dropdown-list {
+    position: relative;
+    background: transparent;
+    text-align: center;
+    height: 0;
+    overflow-y: hidden;
+    transition: opacity 1s ease-in-out;
+    padding-top: 0;
+}
+
+.mobile .nav-wrapper ul li:hover .dropdown-list {
+    height: max-content;
+    padding-top: 6px;
+}
+
+.mobile ul.nav-list li {
+    margin-left: 0;
+    text-align: center;
+}
+
+.mobile .nav-wrapper ul.dropdown-list li a {
+    color: var(--dark-gray);
+}
+
+/* Reset and defaults */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global styles */
+body {
+    font-size: 15px;
+    color: #333;
+    font-family: 'Proxima Nova', sans-serif;
+    background-color: #f4f4f4; /* Light grey background color */
+    margin-left: 50px;
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Reset padding */
+}
+
+/* Example of a media query for smaller screens */
+@media (max-width: 768px) {
+    /* Adjust styles for smaller screens here */
+    .main-header .logo img {
+        width: 100px; /* Adjust the logo size for smaller screens */
+        margin-left: 20px; /* Adjust the margin for smaller screens */
+    }
+    /* Add more responsive styles here */
+}
+
+a {
+    text-decoration: none;
+}
+
+
+.logo {
+    margin-right: auto;
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    background-color: #ccc;
+}
+
+
+.header-right {
+    display: flex;
+    align-items: center;
+    margin-right: 30px; /* Adjust the margin as needed */
+}
+
+
+.header-right .dropbtn {
+    margin-left: 20px; /* Adjust spacing between buttons */
+    padding-right: 15px;
+    font-size: 14px;
+    text-decoration: none;
+    color: black;
+}
+
+.header-right button a:link,
+.header-right button a:visited {
+    color: black; /* Set the color of both regular and visited links to black */
+}
+
+
+.header-right button {
+    background-color: transparent; /* No background color */
+    border: none; /* Remove border */
+    cursor: pointer; /* Change cursor to pointer */
+    padding: 5px 10px; /* Adjust padding */
+}
+
+
+.header-right button:hover {
+    background-color: #f8f8f8; /* Light grey background on hover */
+}
+
+.header-right button:hover img {
+    filter: invert(.5); /* Invert the color of the SVG image to red on hover */
+}
+
+.header-right button img {
+    width: 25px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    .box,
+    .table {
+        width: 100% !important;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .header-right button {
+    background-color: transparent; /* No background color */
+    border: none; /* Remove border */
+    cursor: pointer; /* Change cursor to pointer */
+    padding: 5px 0px; /* Adjust padding */
+}
+
+.header-right {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.sr-only {
+    display: none;
+}
+
+.header-right .dropbtn {
+    margin-left: 10px; /* Adjust spacing between buttons */
+    font-size: 14px;
+    text-decoration: none;
+    color: black;
+    padding: 0px;
+    padding-left: 8px;
+}
+
+}
+
+
+/* Dropdown button */
+.dropbtn {
+    background-color: transparent;
+    color: #333;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 170px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0; /* Align dropdown to the right */
+    top: 100%; /* Position the dropdown below the button */
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+    right: 0;
+}
+
+
+
+/* Main content DASHBOARD*/
+.container-dashboard {
+    margin-left: 65px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.box {
+    width: 55vw;
+    height: 55px;
+    padding: 10px;
+    margin-top: 10px; /* Add margin between boxes */
+    margin-bottom: 20px; /* Add margin between boxes */
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background-color: #fff;
+    display: flex; /* Use flexbox */
+    align-items: center; /* Center items vertically */
+    box-shadow: 0  0 15px rgba(0, 0, 0, 0.1);
+}
+
+.box p {
+    font-size: 22px; /* Font size for the paragraph */
+    color: #333; /* Text color */
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.box p1 {
+    font-size: 16px; /* Font size for the paragraph */
+    color: #333; /* Text color */
+    margin-left: 10px;
+}
+
+.box img {
+    vertical-align: middle;
+}
+
+.table {
+    width: 55vw;
+    height: 160px;
+    box-shadow: 0  0 15px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    border: 1px solid #ccc;
+}
+
+.platform-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #3987CC;
+    border-radius: 5px;
+    color: #fff;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 13px
+}
+
+
+@media (max-width: 768px) {
+    .platform-btn {
+        display: inline-block;
+        padding: 8px 12px;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+    
+    #dashboard {
+        margin: 3px;
+    }
+
+}
+
+
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    height: 45px;
+    border-collapse: collapse; /* Ensure borders collapse properly */
+    align-items: center; /* Center items vertically */
+    background-color: #fff; /* Add background color to rows */
+    padding-left: 15px;
+    padding-right: 15px
+
+}
+
+.row1 {
+
+    display: flex;
+    justify-content: space-between;
+    height: 35px;
+    border-bottom: 1px solid #ccc;
+    border-collapse: collapse; /* Ensure borders collapse properly */
+    align-items: center; /* Center items vertically */
+    background-color: #fff; /* Add background color to rows */
+    padding-left: 15px;
+    padding-right: 15px
+}
+
+.cell {
+    flex: 1;
+    padding: 5px;
+    background-color: #fff;
+    text-align: left; /* Horizontal alignment */
+    vertical-align: middle; /* Vertical alignment */
+}
+
+.row .cell:first-child {
+    flex: 1.5; /* Increase width of the first column */
+}
+
+.row1 .cell:first-child {
+    flex: 1.5; /* Increase width of the first column */
+}
+
+.row1 .cell:last-child {
+    text-align: right; /* Align text to the right in the last column */
+}
+
+.row .cell:last-child {
+    text-align: right; /* Align text to the right in the last column */
+}
+
+
+
+/*Withdrawal*/
+
+/* Add your custom CSS styles here */
+
+.withdrawal-form {
+    width: 55vw;
+    margin-top: 10px;
+}
+
+.withdrawal-form h5 {
+    font-size: 24px;
+    text-align: left;
+    padding-bottom: 50px;
+    }
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="password"]
+select {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Style for form */
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+select {
+    width: 100% !important;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+input[type="password"],
+.form-group textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+#header-main {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style for Receiving Amount */
+.receiving-amount {
+    margin-top: 20px;
+    font-size: 16px;
+    display: none;
+}
+
+/* Style for error message */
+.error-message {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Style for Submit button */
+.submit-button {
+    padding: 10px 20px;
+    background-color: #ccc;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+.submit-button:disabled {
+    background-color: #f2f2f2;
+    cursor: not-allowed;
+}
+
+
+.withdrawal-form {
+    background-color: #fff; /* Light gray background */
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    box-shadow: 0  0 15px rgba(0, 0, 0, 0.1);
+}
+
+.recent-activity {
+    width: 100%;
+    margin-top: 50px;
+    background-color: #fff; /* Light gray background */
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    box-shadow: 0  0 15px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Deposit Page*/
+
+.main-form {
+    width: 55vw;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    box-shadow: 0  0 15px rgba(0, 0, 0, 0.1);
+}
+
+.main-form {
+    background-color: #fff; /* Light gray background */
+    padding: 20px;
+}
+
+.main-form h1 {
+    margin-bottom: 30px;
+}
+
+.main-form h5 {
+    font-size: 24px;
+    text-align: left;
+    padding-bottom: 50px;
+    }
+
+.field {
+    display: block;
+    margin-bottom: 30px;
+
+}
+.deposit-details {
+    margin-top: 50px;
+}
+
+.deposit-details #coin option:first-child {
+    display: none;
+}
+
+/* Style for individual details */
+#btc-details,
+#eth-details,
+#usdt-details {
+    display: none; /* Hide by default */
+}
+
+#btc-details p,
+#eth-details p,
+#usdt-details p {
+    margin-bottom: 10px; /* Add space between detail paragraphs */
+    font-size: 13px;
+}
+
+.container-main {
+    margin: 20px 0px 0px 20px;
+}
+
+#header-pages {
+    display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
+}
+
+#header-pages h1 {
+    text-align: center;
+    padding-bottom: 30px;
+    font-weight: 400;
+}
+
+#header-main {
+    width: 40vw;
+    padding: 50px;
+}
+
+@media (max-width: 768px) {
+    .container-main {
+        margin: 20px;
+        margin-top: 50px
+    }
+
+    .main-form {
+        width: 100%;
+    }
+
+    #header-main {
+        width: 100%;
+        padding: 50px;
+    }
+
+    .buttons{
+        width: 90%;
+        height: auto;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .deposit-form,
+    .withdrawal-form {
+        max-width: 100% !important; /* Adjust width for better readability on mobile */
+        margin: 10px auto; /* Center the form horizontally */
+    }
+
+    .deposit-form h5 {
+        font-size: 20px; /* Decrease font size for better fit on small screens */
+        padding-bottom: 30px; /* Reduce padding for smaller screens */
+    }
+
+    .field {
+        margin-bottom: 20px; /* Decrease margin between fields for smaller screens */
+    }
+
+    .deposit-details {
+        margin-top: 30px; /* Reduce top margin for details section */
+    }
+
+    #btc-details p,
+    #eth-details p,
+    #usdt-details p {
+        font-size: 12px; /* Decrease font size for better readability on mobile */
+    }
+}
+
+
+.submit-buttons {
+    text-align: center;
+}
+
+.buttons{
+    width: 90%;
+    height: 45px;
+    font-size: 15px;
+    border-radius: 30px;
+}
+
+#confirm-deposit,
+#submit-withdrawal {
+    height: 45px;
+    font-size: 15px;
+    border-radius: 5px;
+    background-color: #3987CC;
+}
+
+#details {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items at the start of the cross axis (vertically) */
+}
+
+#personal {
+    margin: 0 15px; /* Adjust as needed */
+}
+
+#personal h1 {
+    font-weight: 400;
+}
+
+.button-container {
+    text-align: left; /* Align the button along the left margin */
+    margin: 20px; /* Adjust the top margin as needed */
+    margin-left: 70px;
+
+}
+
+#personal-button {
+    width: 100%; /* Set the width to 100% to extend it across the container */
+    max-width: 300px; /* Optionally, set a maximum width to control its size */
+    height: 40px;
+    border-radius: 30px;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    #details {
+        display: block; 
+        justify-content: none;
+        align-items: none;
+    }
+
+#personal {
+    margin: initial;/* Adjust as needed */
+    margin-bottom: 30px;
+}
+}
+
+/* Tabela */
+.recent-activity table {
+    width: 100%; /* Širina tabele da bude kao ostatak sadržaja */
+    border-collapse: collapse; /* Spoji ivice ćelija */
+    margin-top: 20px; /* Razmak od prethodnog sadržaja */
+}
+
+.recent-activity th, .recent-activity td {
+    padding: 12px; /* Unutrašnji razmak unutar ćelija */
+    text-align: left; /* Poravnanje teksta levo */
+    border-bottom: 1px solid #ddd; /* Siva linija ispod svake ćelije */
+}
+
+.recent-activity th {
+    background-color: #3987CC; /* Pozadina za zaglavlje tabele */
+    color: white; /* Boja teksta u zaglavlju */
+    font-weight: bold; /* Boldovani tekst u zaglavlju */
+}
+
+.recent-activity tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Svetlija pozadina za svaki drugi red */
+}
+
+.recent-activity tbody tr:nth-child(odd) {
+    background-color: #ffffff; /* Tamnija pozadina za neparni red */
+}
+
+.recent-activity tbody tr:hover {
+    background-color: #ddd; /* Efekat kad se pređe mišem preko reda */
+    cursor: pointer; /* Menja kursor u ruku kad se pređe preko reda */
+}
+
+.recent-activity td {
+    font-size: 14px; /* Veličina teksta u tabeli */
+}
+
+.recent-activity h3 {
+    margin-top: 40px; /* Razmak između naslova i tabele */
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.main-logo{
+    width: 50%;
+}
+
+#chart{
+    width: 55vw;
+}
+
+/* Desktop stil */
+.user-table {
+    width: 55vw;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.user-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    padding: 12px 15px;
+    text-align: center;
+    color: #333;
+}
+
+.user-table td {
+    padding: 12px 15px;
+    text-align: center;
+    color: #555;
+}
+
+.user-table tbody tr:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+.user-table td a.platform-btn {
+    display: inline-block;
+    padding: 8px 18px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.user-table td a.platform-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Mobile stil */
+@media screen and (max-width: 600px) {
+
+    .user-table{
+        background: transparent;
+    }
+
+    .user-table, .user-table thead, .user-table tbody, .user-table th, .user-table td, .user-table tr {
+        display: block;
+        width: 100%;
+    }
+
+    .user-table thead {
+        display: none; /* sakrijemo header */
+    }
+
+    .user-table tr {
+        margin-bottom: 15px;
+        border-radius: 10px;
+        background: #fff;
+        padding: 10px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    .user-table td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+    }
+
+    .user-table td::before {
+        position: absolute;
+        top: 12px;
+        left: 15px;
+        width: 45%;
+        font-weight: bold;
+        color: #555;
+        white-space: nowrap;
+    }
+
+    .user-table td:nth-of-type(1)::before { content: "CFDs"; }
+    .user-table td:nth-of-type(2)::before { content: "Funds"; }
+    .user-table td:nth-of-type(3)::before { content: "Margin"; }
+    .user-table td:nth-of-type(4)::before { content: "Available"; }
+    .user-table td:nth-of-type(5)::before { content: "Profit/Loss"; }
+
+    .user-table td a.platform-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    #chart{
+        width: 100%;
+    }
+}
+
+/* Osnovni stil za desktop */
+#transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+#transactions-table thead {
+    background-color: #f8f9fa;
+}
+
+#transactions-table th, #transactions-table td {
+    padding: 12px 15px;
+    text-align: center;
+    color: #333;
+}
+
+#transactions-table tbody tr:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+.cancel-btn {
+    padding: 6px 12px;
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.cancel-btn:hover {
+    background-color: #cc0000;
+}
+
+/* Responsive stil za mobile */
+@media screen and (max-width: 600px) {
+    #transactions-table, #transactions-table thead, #transactions-table tbody, 
+    #transactions-table th, #transactions-table td, #transactions-table tr {
+        display: block;
+        width: 100%;
+    }
+
+    #transactions-table thead {
+        display: none; /* sakrij header */
+    }
+
+    #transactions-table tbody tr {
+        margin-bottom: 15px;
+        border-radius: 10px;
+        background: #fff;
+        padding: 10px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    #transactions-table tbody td {
+        text-align: left;
+        padding-left: 50%;
+        position: relative;
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #transactions-table tbody td::before {
+        position: absolute;
+        top: 12px;
+        left: 15px;
+        width: 45%;
+        font-weight: bold;
+        color: #555;
+        white-space: nowrap;
+    }
+
+    /* Povezivanje labela sa klasama td */
+    #transactions-table .td-type::before { content: "Transaction Type"; }
+    #transactions-table .td-amount::before { content: "Amount"; }
+    #transactions-table .td-date::before { content: "Date"; }
+    #transactions-table .td-status::before { content: "Status"; }
+    #transactions-table .td-cancel::before { content: "Cancel Withdrawal"; }
+
+    #transactions-table tbody td .cancel-btn {
+        display: block;
+        width: 100%;
+        margin-top: 8px;
+        text-align: center;
+    }
+}
+/* Osnovni stil za desktop */
+#activity-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+#activity-table thead {
+    background-color: #f8f9fa;
+}
+
+#activity-table th, #activity-table td {
+    padding: 12px 15px;
+    text-align: center;
+    color: #333;
+}
+
+#activity-table tbody tr:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+/* Responsive stil za mobile */
+@media screen and (max-width: 600px) {
+    #activity-table, #activity-table thead, #activity-table tbody, 
+    #activity-table th, #activity-table td, #activity-table tr {
+        display: block;
+        width: 100%;
+    }
+
+    #activity-table thead {
+        display: none; /* sakrij header */
+    }
+
+    #activity-table tbody tr {
+        margin-bottom: 15px;
+        border-radius: 10px;
+        background: #fff;
+        padding: 10px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    #activity-table tbody td {
+        text-align: left;
+        padding-left: 50%;
+        position: relative;
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #activity-table tbody td::before {
+        position: absolute;
+        top: 12px;
+        left: 15px;
+        width: 45%;
+        font-weight: bold;
+        color: #555;
+        white-space: nowrap;
+    }
+
+    /* Povezivanje labela sa klasama td */
+    #activity-table .td-type::before { content: "Transaction Type"; }
+    #activity-table .td-amount::before { content: "Amount"; }
+    #activity-table .td-date::before { content: "Date"; }
+}

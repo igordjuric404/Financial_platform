@@ -1,0 +1,497 @@
+/* Reset and defaults */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global styles */
+body {
+    font-size: 15px;
+    color: #333;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f4f4;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Header styles for Homepage */
+.main-header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+}
+
+.main-header .logo img {
+    width: 120px;
+    margin-left: 50px;
+}
+
+.main-logo {
+    width: 120px;
+    margin-left: 50px;
+}
+
+.main-header nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.main-header nav ul li {
+    margin-left: 30px;
+}
+
+.main-header nav ul li.dropdown {
+    align-items: center;
+}
+
+.main-header nav ul li.dropdown .dropdown-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.main-header nav ul li.dropdown .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    width: 100vw;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding-top: 30px;
+}
+
+.main-header nav ul li.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.main-header nav ul li.dropdown .dropdown-content a {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.main-header nav ul li.dropdown .dropdown-content a:hover {
+    background-color: #555;
+}
+
+.main-header .partner-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.main-header .register-link,
+.main-header .login-link {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.main-header .login-link {
+    margin-right: 50px;
+}
+
+.ui-header__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+
+
+
+/* Header styles for registration and login page */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    color: #333;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.logo {
+    margin-right: auto;
+}
+
+.register-button,
+.login-button {
+    margin-right: 50px;
+    border-radius: 30px;
+}
+
+@media (max-width: 768px) {
+    .register-button,
+    .login-button {
+        margin-right: 10px !important;
+    }
+}
+
+@media (max-width: 390px) {
+    .register-button,
+    .login-button {
+        margin-right: 5px !important;
+    }
+}
+
+.register-button a,
+.login-button a {
+    color: #fff;
+    background-color: #0b5ed7;
+    padding: 13px 20px;
+    border-radius: 30px;
+}
+
+.register-button a:hover,
+.login-button a:hover {
+    background-color: #0056b3;
+
+}
+
+@media (max-width: 390px) {
+    .register-button a,
+    .login-button a {
+    color: #fff;
+    background-color: #0b5ed7;
+    padding: 13px 15px !important;
+    border-radius: 30px;
+}
+}
+
+.menu-container {
+    display: inline-block; /* Use flexbox */
+    gap: 10px; /* Add some space between buttons */
+    position: relative;
+}
+.main-menu-links-sub-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0; /* Align dropdown to the right */
+    top: 100%; /* Position the dropdown below the button */
+}
+
+/* Optionally, you can add more styling to the buttons */
+.main-menu-links__header {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.main-menu-links__header:hover {
+    background-color: #0056b3;
+}
+
+
+
+/* Register and login page */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 100px);
+    padding-top: 180px;
+}
+
+@media (max-width: 768px) {
+    main {
+        margin-top: 30px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}
+
+.content {
+    position: relative;
+    text-align: center;
+    background-color: #fff;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    border-top: 2.5px solid #0056b3;
+}
+
+@media (max-width: 768px) {
+    .content {
+       height: 100%;
+    }
+}
+.content h1 {
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Proxima Nova', sans-serif;
+    font-weight: 500;
+}
+
+.form-group {
+    margin-top: 25px;
+    font-size: 16px;
+}
+
+.form-group select {
+    width: calc(100% - 30px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: 40px;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        height: 40px;
+        font-size: 15px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+    width: 100% !important;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 15px;
+
+    }
+}
+
+input[type="email"],
+input[type="password"] {
+    width: calc(100% - 30px);
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+#promo-code {
+    width: calc(100% - 30px);
+}
+
+input[type="password"] {
+    margin-bottom: 0px;
+}
+
+.forgot-password {
+    position: absolute;
+    right: 60px;
+    margin-top: -10px;
+    color: #0b5ed7;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+
+.forgot-password {
+    position: absolute;
+    right: 50px ;
+    margin-top: -10px;
+    color: #0b5ed7;
+    font-size: 14px;
+}
+}
+
+.register-now,
+.already-member {
+    margin-top: 20px;
+}
+
+.reset-button {
+    display: block;
+    width: 100%;
+    color: #fff;
+    background-color: #0b5ed7;
+    padding: 13px 20px;
+    border-radius: 30px;
+    margin-top: 40px;
+    font-size: 14px;
+    border: none;
+}
+
+.resetmail-button,
+.mainlog-button,
+.mainregister-button,
+.save-button {
+    margin-top: 50px;
+}
+.save-button{
+        display: none;
+    }
+
+.registration-text,
+.already-text,
+.no-acc {
+    font-size: 15px;
+    color: #555;
+    margin-top: 10px;
+}
+
+.terms-link,
+.login-link,
+.forgot-pass,
+.reg-now {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.terms-link:hover,
+.login-link:hover {
+    text-decoration: underline;
+}
+
+
+/* Styles for iPads */
+@media (min-width: 600px) and (max-width: 1024px) {
+    main {
+        padding-top: 200px;
+        text-align: center; /* Center the content horizontally */
+
+    }
+
+    .content {
+        width: 55%; /* Adjust width for iPads */
+        margin: 50px auto; /* Center the content horizontally and add vertical margin */
+        padding: 50px; /* Adjust padding for content */
+    }
+
+    .content h1 {
+        font-size: 22px; /* Adjust font size for headings */
+    }
+
+    .form-group {
+        margin-top: 25px; /* Adjust margin for form groups */
+    }
+
+    .form-group select,
+    input[type="email"],
+    input[type="password"] {
+        font-size: 16px; /* Adjust font size for inputs */
+    }
+
+    .forgot-password {
+        right: 60px; /* Adjust position for the forgot password link */
+        margin-top: -10px;
+    }
+
+    .register-now,
+    .already-member {
+        margin-top: 20px; /* Adjust margin for register/login links */
+    }
+
+    .reset-button {
+        padding: 13px 20px; /* Adjust padding for buttons */
+    }
+
+    .resetmail-button,
+    .mainlog-button,
+    .mainregister-button,
+    .save-button {
+        margin-top: 50px; /* Adjust margin for buttons */
+    }
+
+    .save-button{
+        display: none;
+    }
+
+    .registration-text,
+    .already-text {
+        font-size: 14px; /* Adjust font size for registration text */
+        margin-top: 10px;
+    }
+}
+
+
+
+/* Personal Details Page */
+.name-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.name-group .form-group,
+.form-group input[type="text"],
+.form-group input[type="phone"] {
+    width: 48%;
+}
+
+.form-group input[type="text"],
+.form-group input[type="phone"] {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+/* Button styles */
+button a,
+input[type="submit"] a,
+.reset-button a,
+.resetmail-button a,
+.mainlog-button a,
+.mainregister-button a,
+.save-button a {
+    display: block;
+    width: 100%;
+    color: #fff;
+    background-color: #0b5ed7;
+    padding: 13px 20px;
+    border-radius: 30px;
+    border: none; /* Add border */
+    cursor: pointer;
+}
+
+/* Button hover effect */
+button:hover,
+input[type="submit"]:hover,
+.reset-button:hover,
+.resetmail-button:hover,
+.mainlog-button:hover,
+.mainregister-button:hover,
+.save-button:hover {
+    background-color: #0056b3;
+    border-radius: 30px !important;
+}
+
+.error-message{
+    color: red;
+}
+

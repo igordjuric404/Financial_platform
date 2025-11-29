@@ -1,0 +1,1840 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+:root {
+    --primary: #ccc;
+    --pure: #333;
+    --smoke: whitesmoke;
+    --dark-gray: #999;
+}
+
+
+body {
+    font-family: 'Proxima Nova', sans-serif;
+    background: #fff;
+    color: #333
+
+}
+
+h {
+    color: #000;
+}
+
+.main-logo {
+    width: 120px;
+    margin-left: 50px;
+}
+
+
+.container {
+    width: 1152px;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+nav {
+    border-bottom: .1px solid #ccc;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1)
+}
+
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+.brand svg {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.brand svg path {
+    fill: var(--pure);
+}
+
+.nav-wrapper ul.nav-list {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+}
+.nav-wrapper ul.nav-list li {
+    margin-left: 30px;
+    padding: 20px 0;
+    position: relative;
+    font-size: 0.875rem;
+    text-decoration: #333;
+}
+
+.nav-wrapper ul.nav-list li a {
+    color: var(--pure);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-wrapper ul.nav-list li a:hover, .nav-wrapper ul.nav-list li.active a {
+    color: rgb(217, 18, 34);
+}
+
+.btn {
+    background: rgb(217, 18, 34);
+    color: #fff;
+    outline: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    border: 1px solid transparent;
+    transition: background-color 0.3s, color 0.3s; /* Change the transition duration */
+}
+
+.btn.login-btn {
+    background: #fff;
+    color: rgb(217, 18, 34);
+    border-color: rgb(217, 18, 34);
+    
+}
+
+.btn:hover {
+    background-color: hsla(355, 85%, 36%, 1); /* change to your desired color */
+    color: white; /* change to your desired color */
+}
+
+main section.header {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    text-align: left;
+    padding-top: 160px;
+    
+}
+
+main section.header h1 {
+    font-size: 36px;
+    font-weight: 100;
+    text-transform: capitalize;
+    margin-bottom: 20px;
+}
+
+main section.header h4 {
+    font-size: 18px;
+    font-weight: 100;
+    color: #333;
+    margin-bottom: 20px;
+}
+nav ul.dropdown-list {
+    list-style-type: none;
+    display: block;
+    background: #fff;
+    padding: 6px 16px;
+    position: absolute;
+    width: max-content;
+    z-index: 9999;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+nav ul.dropdown-list {
+    border-top: 2px solid;
+    border-color: rgb(217, 18, 34);
+    min-width: 250px;
+}
+
+.nav-wrapper ul.dropdown-list li {
+    margin-left: 0;
+    padding: 8px 0;
+}
+
+.nav-wrapper ul.dropdown-list li:hover {
+    background-color: rgba(109, 118, 126, 0.05);
+    border-left: 2px solid;
+    border-color: rgb(217, 18, 34);
+}
+
+.nav-wrapper ul.nav-list li.become-partner:hover {
+    border-bottom: 2px solid;
+    border-color: rgb(217, 18, 34);
+    transition: color 0.2 ease;
+}
+
+.nav-wrapper ul.nav-list li a.become-partner {
+    color: #333;
+    font-weight: bolder;
+}
+
+
+.nav-wrapper ul.dropdown-list  li a {
+    display: block;
+    color: var(--dark);
+    font-size: 0.855rem;
+    margin-left: 10px;
+} 
+
+.nav-wrapper ul.nav-list li:hover .dropdown-list {
+    opacity: 1;
+    pointer-events: auto;
+    animation: moveUp .5s ease-in-out forwards;
+}
+
+@keyframes moveUp {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(20px); 
+    }
+}
+
+.hamburger {
+    display: none;
+}
+
+.mobile .hamburger {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    cursor: pointer;
+}
+
+.mobile .hamburger span {
+    background: var(--pure);
+    width: 28px;
+    height: 2px;
+    margin-bottom: 8px;
+}
+
+.mobile ul.nav-list {
+    background: #fff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 80px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all .3s ease-in-out;
+}
+
+.hamburger, .brand {
+    z-index: 9999;
+}
+
+.mobile ul.nav-list.open {
+    opacity: 1;
+    pointer-events: auto; 
+    z-index: 9998;
+}
+
+.mobile .hamburger span {
+    transform-origin: left;
+    transition: all .3s ease-in-out;
+}
+
+.mobile ul.nav-list li a {
+    font-size: 20px;
+}
+
+.mobile ul.dropdown-list {
+    position: relative;
+    background: transparent;
+    text-align: center;
+    height: 0;
+    overflow-y: hidden;
+    transition: opacity 1s ease-in-out;
+    padding-top: 0;
+}
+
+.mobile .nav-wrapper ul li:hover .dropdown-list {
+    height: max-content;
+    padding-top: 6px;
+}
+
+.mobile ul.nav-list li {
+    margin-left: 0;
+    text-align: center;
+}
+
+.mobile .nav-wrapper ul.dropdown-list li a {
+    color: var(--dark-gray);
+}
+
+
+#container-symbol {
+    width: 1152px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+
+
+
+/* Adjustments for aligning sections horizontally */
+.header .pricing,
+.header .tech,
+.header .assets,
+.header .security {
+    width: 24.5%;
+    display: inline-flex; /* Ensure each section appears on the same line */  
+    align-items: left;
+    vertical-align: top;
+    padding-left: 20px;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .header .pricing,
+    .header .tech,
+    .header .assets,
+    .header .security {
+        width: 100%; /* Make each section occupy full width on mobile devices */
+        padding-left: 0; /* Remove left padding on mobile devices */
+        margin-bottom: 20px; /* Add margin to separate sections on mobile devices */
+        margin-top: 0;
+    }
+}
+
+/* Adjustments for placing image containers above description containers */
+.header .pricing-pic,
+.header .tech-pic,
+.header .assets-pic,
+.header .security-pic,
+.header .pricing-description,
+.header .tech-description,
+.header .assets-description,
+.header .security-description {
+    text-align: left; /* Center align the content within each section */
+    margin-bottom: 25px; /* Add margin between image and description */
+    
+}
+
+/* Optional: Adjust image size */
+.header .pricing-pic div,
+.header .tech-pic div,
+.header .assets-pic div,
+.header .security-pic div {
+    font-size: 50px; /* Adjust the size as needed */
+}
+
+h5 {
+    font-size: 1.2rem; /* Adjust the font size */
+    font-weight: 500; /* Set the font weight to bold */
+    color: #333; /* Set the text color */
+    margin-top: 0; /* Remove any default top margin */
+    margin-bottom: 10px; /* Add some bottom margin for spacing */
+}
+
+/* Select all <p> elements within the container with the ID container-symbol */
+#container-symbol p {
+    color: #333;
+    font-weight: 100;
+}
+
+
+.container-home {
+    background-image: url(images/btcbg3.jpeg);
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding-bottom: 150px;
+    margin-top: 5px;
+}
+
+#main-text h1,
+#main-text h4{
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .container-home {
+        background-image: url(images/btcbg3.jpeg);
+        background-position: right;
+        background-repeat: no-repeat;
+        background-size: contain;
+        padding-bottom: 100px;
+        padding-top: -100px !important;
+    }
+
+    #main-text {
+        background-color: rgba(255, 255, 255, 0.7);
+        margin-top: -80px !important;
+        padding-bottom: 100px
+    }
+
+    #main-text h1,
+    #main-text h4{
+        font-weight: 500;
+        padding-top: 30px;
+    }
+}
+
+
+#container-laptop {
+    width: 1152px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#container-laptop {
+    display: flex;
+    align-items: center;
+}
+
+.row.justify-content-center{
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+}
+
+.platform-image {
+    flex: 0 0 auto; /* Prevent image from growing */
+    margin-right: 20px; /* Add spacing between image and text */
+}
+
+.platform-image img {
+    position: relative;
+    width: 500px;
+    height: 400px;
+    max-width: 100%;
+    align-items: left;
+    flex: 0 0 auto;
+    margin-right: 100px;
+    margin-top: 50px;
+}
+
+.platform-text {
+    flex: 1; /* Allow text to grow to fill available space */
+}
+
+.platform-text h2 {
+    margin-bottom: 30px;
+    font-weight: 200;
+    font-size: 36px;
+}
+
+.ai-powered {
+    color: rgb(217, 18, 34); /* Change the color of the link text */
+    font-weight: 400;
+}
+
+.filler p{
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 100;
+
+}
+
+
+.btn-markets a {
+    color: rgb(217, 18, 34); /* Change the color of the link text */
+    text-decoration: none; /* Remove underline from the link */
+    font-weight: 600;
+
+}
+
+.btn-markets a i {
+    display:inline-flex;
+}
+
+.btn-markets a:hover i {
+    transform: translateX(5px); /* Move the <i> element 5px to the right on hover */
+}
+
+
+@media (max-width: 768px) {
+    .row.justify-content-center {
+        display:inline-block;
+        margin-top: -150px;
+        margin-bottom: 50px;
+        max-width: 90vw;
+    }
+    #container-laptop {
+        flex-direction: column; /* Stack items vertically */
+        align-items: flex-start; /* Align items to the start (top) */
+    }
+
+    .platform-image img{
+    width: 100%; /* Set the image width to 100% of its container */
+    max-width: 100%; /* Ensure the image doesn't exceed its container width */
+    height: auto; /* Maintain the aspect ratio of the image */
+    margin-right: 0; /* Remove the margin-right to avoid extra spacing */
+}
+}
+
+#container-vault {
+    max-width: 100%;
+    position: relative;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 50px;
+}
+
+#container-vault {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.this.align-items-center{
+    display: flex;
+    max-width: fit-content;
+}
+
+.laptop-about {
+    padding-top: 50px !important;
+}
+
+@media (max-width: 768px) {
+    .totals-about .boxes{
+        display: inline;
+        max-width: 100%;
+    }
+
+    #container-vault1{
+        margin-top: -60px;
+    }
+}
+
+.confidence-image {
+    margin-left: auto;
+}
+
+.confidence-image img{
+    position: relative;
+    width: 450px;
+    height: 450px;
+    max-width: 100%;
+    align-items: right;
+    flex: 0 0 auto;
+}
+
+.numbers-title {
+    color: rgb(217, 18, 34); /* Change the color of the link text */
+    font-weight: 400;
+}
+
+
+.confidence-text {
+    flex: 1; /* Allow text to grow to fill available space */
+    margin-right: 20px;
+    display:relative;
+}
+
+.confidence-text h2 {
+    margin-bottom: 30px;
+    font-weight: 200;
+    font-size: 36px;
+}
+
+.about-us h2 {
+    font-weight: 500 !important;
+}
+
+.boxes {
+    display: flex;
+    flex-wrap: wrap; /* Allow flex items to wrap to the next line */
+}
+
+.small-box {
+    width: calc(33.333% - 20px); /* Set the width of each box to one-third minus margin */
+    margin-right: 20px; /* Add margin between boxes */
+    margin-bottom: 30px; /* Add margin below each row */
+}
+
+@media (max-width: 768px) {
+    .small-box {
+        width: calc(50% - 20px); /* Set the width of each box to one-half minus margin for smaller screens */
+    }
+}
+
+.text-vault {
+    margin-bottom: 40px;
+    color: #333;
+    font-weight: 100;
+}
+
+.top-info {
+    font-size: 30px;
+    font-weight: 300;
+}
+
+.bottom-info {
+    font-size: 15px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 100;
+}
+
+.btn-vault {
+    color: rgb(217, 18, 34); /* Change the color of the link text */
+    text-decoration: none; /* Remove underline from the link */
+    font-weight: 400;
+    border: 1px solid transparent;
+    transition: background-color 0.3s, color 0.3s; /* Change the transition duration */
+
+}
+
+.btn-vault {
+    padding: 10px 20px;
+    background-color: #fff;
+    color: rgb(217, 18, 34);
+    border-color: rgb(217, 18, 34);
+    
+}
+
+.btn:hover {
+    background-color: hsla(355, 85%, 36%, 1); /* change to your desired color */
+    color: white; /* change to your desired color */
+}
+
+
+
+@media (max-width: 768px) {
+    .this.align-items-center {
+        display:inline;
+        margin-top: -150px;
+        margin-bottom: 50px;
+    }
+    #container-laptop {
+        flex-direction: column; /* Stack items vertically */
+        align-items: flex-start; /* Align items to the start (top) */
+    }
+
+    .platform-image {
+        margin-bottom: 50px; /* Add margin below image */
+    }
+}
+
+
+.text-center {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 200;
+    margin-bottom: 80px;
+    letter-spacing: 1px;
+}
+    #container_providers1 {
+    margin-top: -200px !important;
+}
+
+.providers-main {
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    vertical-align: center;
+}
+
+.providers {
+    margin: 0 25px; /* Adjust margin between images */
+}
+
+.providers img {
+    width: 180px;
+    height: auto;
+    filter: grayscale(90%); /* Initially set the images to grey */
+    transition: filter 0.3s ease; /* Add transition effect */
+    vertical-align: middle; /* Align the images vertically in the middle */
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+
+.providers img:hover {
+    filter: grayscale(0%); /* Change the filter to 0% when hovered over */
+}
+
+
+@media (max-width: 768px) {
+    .providers-main {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        
+    }
+
+    .providers {
+        width: 40%; /* Two images in a row */
+        text-align: center;
+        margin: 15px;
+
+    }
+
+    #container_providers1 {
+        margin-top: -120px !important;
+        text-align: center;
+    }
+
+    /* Adjust top and bottom margins for specific images */
+
+    .providers:nth-last-child(-n+2) {
+        margin-top: 50px; /* Remove bottom margin for last two images */
+    }
+
+    .providers img {
+        max-width: 100%; /* Make images responsive */
+        height: auto;
+    }
+}
+
+
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) 
+  and (orientation: portrait) {
+    .providers-main {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        
+    }
+
+    #container_providers1 {
+        margin-top: -120px !important;
+        text-align: center;
+    }
+
+    /* Adjust top and bottom margins for specific images */
+
+    .providers:nth-last-child(-n+2) {
+        margin-top: 50px; /* Remove bottom margin for last two images */
+    }
+
+    .providers img {
+        max-width: 100%; /* Make images responsive */
+        height: auto;
+  }
+}
+
+#three-steps {
+    margin-top: 50px !important;
+    background-image: url(Images/stepsbackground.avif);
+    background-size: cover; /* Cover the entire element with the background image */
+    min-width: 100%;
+    background-position: center;
+    padding-top: 50px;
+    padding-bottom: 0px;
+}
+
+.register-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 50px;
+    text-align: center;
+}
+
+
+.steps {
+    width: 100%;
+    justify-content: center;
+    white-space: nowrap; /* Prevent wrapping */
+    color: #fff;
+}
+
+.steps h5 {
+    margin-top: 0; /* Remove default margin */
+    font-size: 26px;
+    font-weight: 400;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add text shadow */
+}
+
+.steps h3 {
+    margin-top: 30px; /* Adjust margin top for heading */
+    font-weight: 400;
+    font-size: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 1); /* Add text shadow */
+}
+
+.steps p {
+    margin-top: 10px; /* Adjust margin top for paragraph */
+    color: #fff;
+    font-weight: 100;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add text shadow */
+    text-align: center;
+}
+
+.register-step {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center;
+
+}
+
+
+/* Styles for mobile */
+@media (max-width: 768px) {
+
+    .register-steps {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 0;
+        margin-left: 0;
+        text-align: left;
+    }
+    .steps{
+        width: 100%;
+        padding-top: 20px;
+    }
+    #three-steps .container {
+        padding: 0 20px; /* Adjust container padding for mobile */
+    }
+
+    #three-steps .steps h5,
+    #three-steps .steps h3,
+    #three-steps .steps p {
+        margin-left: 0; /* Reset left margin */
+        white-space: nowrap;
+    }
+    .register-step {
+       padding-top: 30px;
+    
+    }
+}s
+
+/* Footer styles */
+.footer {
+    position: relative; /* Position the footer */
+    bottom: 0; /* Align it to the bottom */
+    left: 0; /* Align it to the left */
+    width: 100%; /* Make it full width */
+    margin-left: 80px;
+    margin-right: 80px;
+    margin-top: 80px;
+    background-color: var(--background-alternative); /* Set background color */
+    color: var(--text-color); /* Set text color */
+    padding: var(--space-m); /* Add padding */
+}
+
+/* Other footer styles remain unchanged */
+.footer a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.footer button:focus {
+    outline: none;
+}
+
+.footer-menu {
+    display: flex;
+    justify-content: space-between;
+    margin-top:50px
+}
+
+.footer-menu a {
+    text-decoration: none;
+}
+
+.footer-menu__item {
+    border-top: 1px solid var(--border-primary);
+    flex: 1;
+    max-width: 25%;
+}
+
+.footer-menu__item:first-child {
+    border-top: 0;
+}
+
+.footer-menu__parent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-m) 0;
+}
+
+#menu_market-footer,
+#menu_company-footer,
+#menu_trading-footer,
+#menu_docs-footer,
+#menu_contact-footer {
+    background-color: transparent;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: left;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#menu_market-footer:hover {
+    background-color: #0056b3;
+}
+
+.footer-menu__children {
+    max-height: 100vw;
+    padding: 0;
+    cursor: pointer;
+    list-style-type: none;
+    transition: max-height .15s ease-out;
+    overflow: hidden;
+}
+
+
+.footer-menu__children {
+    font-size: 13px;
+    margin-bottom: 50px
+}
+
+.footer-menu__children {
+    margin-top: 12px;
+}
+
+.footer-menu__child {
+    margin-bottom: 12px;
+}
+
+.footer-menu__child:hover {
+    color: rgb(217, 18, 34);
+}
+
+.footer-menu__children_opened {
+    max-height: 500px;
+}
+
+.footer-menu__child {
+    padding: var(--space-xs) 0;
+    margin-left: var(--space-xl);
+}
+
+/* Define styles for screens larger than 768px */
+@media (min-width: 769px) {
+    .footer {
+        display: block; /* Show the footer */
+    }
+}
+
+/* Define styles for screens up to 768px */
+@media (max-width: 768px) {
+    .footer {
+        display: none; /* Hide the footer */
+    }
+}
+
+.about-us {
+    position: block;
+}
+
+.about-us .small-box {
+    margin-right: 200px;
+}
+
+.about-us .small-box:nth-child(even) {
+    margin-right: 0; /* Remove right margin from even boxes */
+}
+
+.about-us .small-box .top-info {
+    margin-bottom: 10px; /* Add margin between top-info and bottom-info */
+}
+
+.about-us h2 {
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.about-us .small-box .top-info {
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.about-us .small-box .top-info i {
+    color: rgb(217, 18, 34);
+    display: inline-block;
+}
+
+.laptop-about {
+    margin-top: 50px !important;
+}
+
+
+.credit-score .platform-image img {
+    width: 550px;
+    height: 400px;
+    margin-left: 50px;
+}
+
+@media (max-width: 768px) {
+    .credit-score .platform-image img {
+        width: 95%;
+        height: auto;
+        margin-left: 20px;
+        margin-bottom: -100px;
+    }
+    #row-symbol {
+        padding-top: 0px
+
+    }
+}
+
+main section.header.links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* This will align the text inside the h1 and h4 */
+    padding-top: 100px !important;
+}
+
+
+main section.header.links h1{
+    font-weight: 400;
+    text-align: center;
+}
+
+main section.header.links h4 {
+    text-align: center;
+}
+
+main section.header.links h2 {
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+
+/* MARKETS EDIT*/
+
+.container-border {
+    padding-bottom: 50px;
+    background-color: hsla(355, 85%, 36%, 1);
+    padding-top: 0px;
+    color: #fff !important;
+}
+.container-border h4{
+    color: #fff !important;
+}
+
+
+.agriculturals-icon {
+    fill: #F5DEB3 !important; /* This will change the color of the SVG image */
+}
+
+.boxes {
+    display: flex;
+    flex: wrap;
+    justify-content: center;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    
+}
+
+
+#boxes-trading .small-box {
+    background-color: #fff; /* Example background color */
+    border: 0.5px solid transparent;
+    border-color: #333;
+    padding: 20px; /* Example padding */
+    border-radius: 10px; /* Example border radius */
+    text-align: left; /* Center the content horizontally */
+    width: 100%;
+    margin: 30px;
+
+}
+
+#container-vault .boxes {
+    margin-top: 0px;
+    justify-content: center;
+}
+
+#boxes-trading .small-box p {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #333;
+    padding: 10px;
+}
+
+.small-box i {
+    color: rgb(217, 18, 34);
+    display: inline-block;
+    font-weight: 500;
+}
+
+.small-box p1 {
+    font-weight: bold;
+    font-size: 20px;
+    padding: 10px;
+}
+
+.small-box p2 {
+    font-weight: bold;
+    padding: 10px;
+}
+
+
+
+@media (max-width: 768px) {
+
+    #boxes-trading .small-box {
+        background-color: #fff; /* Example background color */
+        border: 0.5px solid transparent;
+        border-color: #333;
+        padding: 20px; /* Example padding */
+        border-radius: 10px; /* Example border radius */
+        text-align: left; /* Center the content horizontally */
+        width: 100%;
+        margin-right: 10px;
+        margin-left: 10px;
+    
+    }
+}
+
+
+
+#leverage-main {
+    margin-top: 0px;
+    padding-top: 80px;
+}
+
+#leverage-main .top-info{
+    font-weight: 500;
+    font-size: 40px;
+}
+
+#leverage-main .bottom-info{
+    font-weight: 300;
+    font-size: 20px;
+}
+
+#margin-req {
+    padding-bottom: 50px;
+    padding-top: 50px;
+}
+
+.margin-info {
+    font-size: 18px
+}
+
+@media (max-width: 768px) {
+    #leverage-main h4,
+    #margin-req h4{
+        text-align: left;
+    }
+
+    #leverage-info {
+        justify-content: start !important;
+        margin-top: 40px;
+        max-width: 100%
+    }
+
+}
+
+#leverage-info {
+    justify-content: center !important;
+    margin-top: 40px;
+    max-width: 60vw
+}
+
+#leverage-info p{
+    text-align: left;
+    color: #333
+}
+
+#leverage-info p:not(.margin-info) + p {
+    margin-top: 30px; /* Adjust the value as needed */
+}
+
+#leverage-info .margin-info {
+    margin-bottom: 5px;
+}
+
+#block-trade {
+    padding-top: 80px;
+}
+
+#block-trade h1 {
+    margin-bottom: 20px;
+}
+
+#block-trade p{
+    padding-bottom: 30px;
+    color: #333;
+    font-weight: 400;
+}
+
+#block-trade i {
+    display: inline-block;
+    top: 2px;
+    color: rgb(217, 18, 34);
+    font-size: 25px;
+    padding-right: 10px;
+
+}
+
+#block-desk {
+    padding-top: 100px;
+}
+
+
+
+.container-block  {
+    background-color: #f8f8f8;
+    padding-bottom: 150px;
+    display: flex;
+}
+
+#block-link {
+    position: relative;
+    margin-right: 0 !important;
+    margin-left: 144px;
+    width: 100% !important
+}
+
+#block-img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: max-content;
+}
+
+#about-img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 432px;
+}
+
+#about-text h1 {
+padding-top: 30px;
+}
+
+#about-text {
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 9995;
+}
+
+
+
+#block-desk h1 {
+    margin-bottom: 30px;
+    font-size: 28px;
+    text-align: left;
+}
+
+#block-desk h4 {
+    font-size: 16px;
+    font-weight: bolder;
+    text-align: left;
+}
+
+#block-desk i {
+    display: inline-block;
+    vertical-align: middle;
+    color: rgb(217, 18, 34);
+    font-size: 25px;
+    padding-right: 10px;
+}
+
+#block-desk2 {
+    padding-top: 100px;
+}
+
+#block-desk2 h4{
+    font-size: 15px;
+}
+
+
+#partner-main {
+    padding-top: 100px;
+}
+
+#partner-main p{
+    font-size: 50px;
+}
+
+#partner-main .bottom-info{
+    font-size: 20px !important;
+}
+
+#partner-main .bottom-info p{
+    font-size: 40px;
+}
+
+
+#partner-row {
+    max-width: fit-content;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+#partner-row .filler{
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold
+}
+
+#partner-row h4{
+    margin-top: -10px;
+    white-space: nowrap;
+    justify-content: center;
+    font-size: 20px;
+}
+
+#partner-text {
+    padding-right: 60px;
+}
+
+#partner-text2 {
+    padding-left: 80px;
+    border-left: .1px solid;
+}
+
+#partner-head {
+    margin-bottom: 50px
+}
+
+#partner-head h2 {
+    margin-top: 100px;
+    font-weight: 400;
+    font-size: 35px;
+}
+
+.partner-clr {
+    color: #00b15b;
+    font-weight: bolder;
+}
+
+#partner-main .boxes .small-box{
+    white-space: nowrap;
+    padding: 60px;
+}
+
+
+
+
+@media (max-width: 768px) {
+
+    #partner-head {
+        margin-bottom: 100px
+    }
+
+    #partner-main p{
+        font-size: 28px;
+    }
+    .bottom-info .ai-powered {
+        font-size: 20px !important;
+        /* Add any other styles you want for the span here */
+    }
+
+    #partner-row {
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: left;
+        max-width: 100%;
+    }
+
+    #partner-row h2 {
+        white-space: nowrap;
+    }
+
+    #partner-row h4 {
+        white-space: normal;
+        overflow-x: visible;
+        text-align: left;
+    }
+
+    #partner-text {
+        text-align: left !important;
+        padding-right: 0px
+    }
+
+    #partner-text2 {
+        padding-top: 50px;
+        border: none;
+        text-align: left;
+        padding-left: 0
+    }
+
+    #three-steps {
+        padding-bottom: 50px;
+    }
+
+    #three-steps p {
+        white-space: normal;
+        overflow-x: visible;
+        text-align: left;
+        margin-bottom: 50px;
+    }
+
+    #partner-main .boxes .small-box{
+        white-space: nowrap;
+        padding: 10px;
+    }
+
+}
+
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) 
+  and (orientation: portrait) {
+
+
+    #partner-row {
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        max-width: 100%;
+    }
+
+    #partner-text {
+        padding-right: 0;
+        margin-bottom: 30px;
+
+    }
+
+
+    #partner-text2 {
+        padding: 80px;
+        border: none;
+        text-align: center;
+
+    }
+
+
+  }
+
+
+#security-main .small-box {
+    margin-right: 150px; /* Adjust the value as needed to create the desired space */
+}
+
+#security-main .small-box:last-child {
+    margin-right: 0; /* Remove margin from the last small-box */
+}
+
+#security-totals .boxes{
+    margin-bottom: 0px
+}
+
+#security-totals i {
+    font-size: 50px;
+    margin-bottom: 20px;
+    align-items: left;
+}
+
+#security-totals .boxes p{
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+#security-totals .top-info {
+    text-align: center !important;
+}
+#security-totals .bottom-info {
+    font-size: 18px;
+}
+
+.security-trade {
+    width: 45%;
+    margin-right: 100px;
+    margin-top: -50px;
+}
+
+.security-trade:first-child {
+    margin-left: 20px; /* Adjust the spacing as needed */
+}
+
+.security-trade:last-child {
+    margin-right: 20px; /* Adjust the spacing as needed */
+}
+
+.security-info {
+    font-size: 20px;
+}
+
+
+@media (max-width: 768px) {
+
+    #security-main .small-box {
+        margin-right: 10px; /* Adjust the value as needed to create the desired space */
+        min-width: 100%;
+    }
+    
+    #security-main .small-box:last-child {
+        margin-right: 10; /* Remove margin from the last small-box */
+    }
+    
+    #security-totals .boxes{
+        margin-bottom: 0px;
+    }
+    
+    #security-totals i {
+        font-size: 50px;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+    
+    #security-totals .boxes p{
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    #security-totals .top-info {
+        text-align: center !important;
+    }
+
+    .security-trade {
+        min-width: 100%;
+        margin-right: 0px;
+        margin-top: -50px;
+    }
+    #trade2 {
+        display: none;
+        max-block-size: 10%;
+
+    }
+}
+
+
+.images-shares {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
+  }
+  
+  .images-shares img {
+    width: 50px;
+    margin-left: 5px;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  
+    @media (max-width: 768px) {
+        .images-shares img {
+          margin-left: 0 !important; /* Remove left margin */
+          margin-right: 15px !important; /* Add some right margin for spacing */
+          margin-bottom: 30px; /* Add bottom margin to separate rows */
+          max-width: 20%;
+        }
+
+        #apple-logo {
+            margin-bottom: 38px !important;
+        }
+      }
+
+
+
+
+/* ACCCOUNT TYPES */
+
+
+
+.header-types {
+    padding-top: 100px;
+    text-align: center;
+    background-color: #f8f8f8;
+    padding-bottom: 50px;
+}
+
+
+.header-types h1{
+    font-size: 36px;
+    font-weight: 400;
+    padding-bottom: 20px;
+    color: #333;
+}
+
+.header-types h4{
+    font-size: 18px;
+    font-weight: 100;
+    color: #333;
+    padding-bottom: 20px;
+}
+
+.container-buttons {
+    display: flex;
+    justify-content: center; /* Align items horizontally at the center */
+}
+
+
+.container-buttons button {
+    background-color: #999;
+    color: #fff;
+    border: 1px solid;
+    font-size: 16px; /* Font size */
+    text-align: center; /* Text alignment */
+    border-radius: 5px;
+    box-shadow: none;
+    outline: none;
+}
+
+.container-buttons button {
+    width: 200px; /* Set the desired width */
+    height: 40px; /* Set the desired height */
+}
+
+.container-buttons button:hover {
+    background-color: hsla(355, 85%, 36%, 1); /* New background color on hover */
+    color: #fff; /* New text color on hover */
+}
+
+.container-buttons button.active {
+    background-color: hsla(355, 85%, 36%, 1); /* Highlighted background color */
+    color: #fff; /* Highlighted text color */
+}
+
+
+#premium-button:hover {
+    background-color: #192E47;
+}
+
+#premium-button.active {
+    background-color: #192E47 /* Your desired background color for the active state */;
+}
+
+.container-buttons button:not(.active) {
+    opacity: 0.5; /* Adjust the opacity to dim the inactive button */
+    /* You can also adjust other styles to visually differentiate the inactive button */
+}
+
+
+
+
+.container-types {
+    background-color: #f8f8f8;
+}
+
+.main-slots {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping to next line */
+    justify-content: space-between; /* Horizontally distribute items with space between */
+    margin-left: 70px;
+    margin-top: 100px;
+    margin-right: 70px;
+    margin-bottom: 100px;
+}
+
+.cards-slots {
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.cards-slots {
+    width: 32.33%; /* Adjust the width based on the number of cards */
+    margin-bottom: 20px; /* Add margin between cards */
+    flex-direction: column; /* Align items vertically inside each card slot */
+    background-color: #fff;
+}
+
+.slot-top {
+    text-align: center;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.slot-top {
+    border-bottom: 4px solid rgb(200, 18, 34);
+}
+
+.slot-title {
+    color: #8B0000;
+    font-size: 30px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    letter-spacing: .03em
+
+}
+
+.offer-price {
+    font-size: 30px;
+    font-weight: 400;
+    text-shadow: .1px 0px 1px rgba(0, 0, 0, 0.5)
+}
+
+.minimum {
+    font-size: 15px;
+
+}
+
+.bottom-benefits {
+    list-style-type: none; /* Remove the bullet points */
+    margin-bottom: 20px; /* Add space between list items */
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.item-bottom {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px
+}
+
+.item-bottom-disabled {
+    color: lightgrey;
+}
+
+.item-bottom-disabled {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px
+}
+
+
+#premium-main .cards-slots{
+    background-color: #fff;
+}
+
+#premium-main .slot-top {
+    border-bottom: 4px solid #192E47
+}
+
+#premium-main .cards-slots{
+    border: 1px solid #192E47;
+    border-radius: 15px;
+}
+
+
+#premium-main .slot-title{
+    color: #192E47;
+    font-weight: 600;
+}
+
+#premium-main .item-bottom{
+    border-bottom: 1px solid #192E47;
+}
+
+
+@media only screen and (max-width: 768px)  {
+    .container-types {
+        overflow-x: scroll; /* Enable horizontal scrolling for smaller screens */
+    }
+
+    .main-slots {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .cards-slots {
+        display: block; /* Display cards slots as blocks for better stacking on smaller screens */
+        width: 100%; /* Set width to 100% to take up full width */
+        margin-bottom: 20px; /* Add some bottom margin for better spacing between cards */
+
+    }
+
+    .bottom-benefits {
+        white-space: normal;
+    }
+    
+}
+
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) 
+  and (orientation: portrait) {
+
+    .main-slots {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .bottom-benefits {
+        white-space: normal;
+    }
+  }
+
+
+#legal-links {
+    display: flex !important;
+    justify-content: center !important; /* Align items horizontally at the center */
+}
+
+.docs-legal {
+    list-style-type: none; /* Remove the bullet points */
+    margin-bottom: 20px; /* Add space between list items */
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.docs-legal {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+
+.docs-legal li a{
+    color: #0056b3;
+    text-decoration: none;
+}
+
+
+
+.pics-img {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    background-color: #f8f8f8;
+    padding-top: 2px;
+}
+
+#cover-img {
+    width: 100%; /* Image takes full width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.test-head {
+    width: 100%;
+    text-align: left;
+    padding: 20px;
+}
+
+.test-head h1,
+.test-head h4 {
+    font-weight: 400;
+}
+
+.test-head h4 {
+    padding-top: 20px;
+}
+
+/* Styles for PC and iPad */
+@media only screen and (min-width: 600px) {
+    .pics-img {
+        flex-direction: row; /* Align elements side by side */
+        align-items: center; /* Align elements to the top */
+        padding-left: 50px;
+    }
+
+    #cover-img {
+        max-width: 50%; /* Image takes up to 50% width */
+    }
+
+    .test-head {
+        max-width: 50%; /* Text takes up to 50% width */
+        margin-right: auto; /* Push text to the left */
+    }
+}
+
+/* Styles for Mobile */
+@media only screen and (max-width: 599px) {
+    .pics-img {
+        flex-direction: column-reverse; /* Align elements side by side */
+        align-items: flex-start; /* Align elements to the top */
+        padding-bottom: 20px;
+    }
+    
+    .test-head {
+        text-align: center; /* Center text on mobile */
+        text-align: left;
+    }
+
+    .test-head h1 {
+        padding-top: 20px;
+    }
+}
