@@ -6,19 +6,17 @@ $(document).ready(function () {
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsHost = window.location.hostname;
     let socket = new WebSocket(`${wsProtocol}//${wsHost}/ws`);
-
-    console.log("🔌 WebSocket URL:", `${wsProtocol}//${wsHost}/ws`);
     
     socket.onopen = function() {
-        console.log("✅ WebSocket OPENED successfully");
+        // WebSocket connected
     };
     
     socket.onerror = function(error) {
-        console.error("❌ WebSocket ERROR:", error);
+        console.error("WebSocket ERROR:", error);
     };
     
     socket.onclose = function(event) {
-        console.error("🔴 WebSocket CLOSED:", event.code, event.reason);
+        console.error("WebSocket CLOSED:", event.code, event.reason);
     };
     
     let cryptoPrices = {}; 
@@ -424,26 +422,17 @@ $(document).ready(function () {
 
     socket.onmessage = function(event) {
         let data;
-        console.log("📨 RAW WebSocket data received:", event.data);
 
         if (typeof event.data === "string") {
-            console.log("📊 Parsed data type: string");
-
             if (event.data.trim().startsWith('{') || event.data.trim().startsWith('[')) {
                 try {
                     data = JSON.parse(event.data);
-                console.log("✅ Parsed JSON data:", data);
-                console.log("📈 Number of symbols:", Object.keys(data).length);
-
                     handleSocketData(data);
                 } catch (e) {
-                    console.error("Greška pri parsiranju JSON-a:", e);
+                    console.error("Error parsing WebSocket data:", e);
                 }
-            } else {
-                console.log("Primljen nevalidan JSON:", event.data);
             }
-        } 
-        else if (event.data instanceof Blob) {
+        } else if (event.data instanceof Blob) {
             const reader = new FileReader();
             reader.onload = function() {
                 try {
@@ -451,13 +440,10 @@ $(document).ready(function () {
                     data = JSON.parse(blobData);
                     handleSocketData(data);
                 } catch (e) {
-                    console.error("Greška pri parsiranju Blob-a:", e);
+                    console.error("Error parsing Blob data:", e);
                 }
             };
             reader.readAsText(event.data);
-        } 
-        else {
-            console.log("Neobičan tip podataka primljen:", event.data);
         }
     };
 
@@ -508,7 +494,6 @@ $(document).ready(function () {
             cryptoPrices[symbol] = {};
         }
 
-        console.log(selectedSymbol);
 
         const prevPrice = parseFloat(cryptoPrices[symbol].price) || price;
         const buyPrice = price * (1 + spreadPercent / 2);
@@ -648,7 +633,6 @@ $(document).ready(function () {
         $('.buy-sell-cell').removeClass('active buy sell');
         $(this).addClass('active buy');
         calculateValue();
-        console.log("Aaaaa");
     });
 
     $('#cell-sell').on('click', function() {
@@ -656,7 +640,6 @@ $(document).ready(function () {
         $('.buy-sell-cell').removeClass('active buy sell');
         $(this).addClass('active sell');
         calculateValue();
-         console.log("Aaaaa");
     });
 
     $('#order-cell-buy').on('click', function() {
@@ -679,8 +662,6 @@ $(document).ready(function () {
     });
 
     $('#place-deal-button').on('click', function() {
-
-        console.log("CLICK");
 
         let balanceText = $('#user-balance').text().trim();
         let balance = parseFloat(balanceText.replace(/[^0-9.-]+/g, "")) || 0;
@@ -749,7 +730,6 @@ $(document).ready(function () {
                 success: function(response) {
                     try {
                         const data = (typeof response === "string") ? JSON.parse(response) : response;
-                        console.log(data);
 
                         if (data.success) {
                             localStorage.setItem('positionsVisible', 'true');
@@ -810,8 +790,6 @@ $(document).ready(function () {
                 limit_at: limitAt
             },
             success: function(response) {
-
-                console.log("ORDER SAVED:", response);
 
                 localStorage.setItem('ordersVisible', 'true');
 
@@ -1229,7 +1207,6 @@ $(document).ready(function () {
                             } else if (stockSymbols.includes(rowSymbol)) {
                                 margin = size * 100 * rowLatest * 0.05;
                             } else if (commodityLotSizes[rowSymbol]) {
-                                console.log("Za " + rowSymbol + "size " + size + "lot " + commodityLotSizes[rowSymbol] + "latest " + rowLatest);
                                 margin = size * commodityLotSizes[rowSymbol] * rowLatest * 0.03;
                             } else {
                                 margin = Math.abs(size) * rowLatest * 0.1;
