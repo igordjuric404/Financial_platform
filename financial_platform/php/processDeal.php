@@ -45,7 +45,7 @@ try {
 
         // PL računamo prema tipu
         $priceForPL = $dealType === 'BUY' ? $sellPrice : $buyPrice;
-        $profitLoss = ($priceForPL - $deal['opening']) * abs($deal['size']) * 0.1;
+        $profitLoss = calculatePL($deal['symbol'], $deal['size'], $deal['opening'], $latestPrice);
         $totalPL += $profitLoss;
 
         // Margin koristi se ono što je već rezervisano u deal-u
@@ -58,8 +58,14 @@ try {
     if ($available < $margin) {
         $conn->rollBack();
         echo json_encode([
-            'success' => false,
-            'message' => 'Insufficient available funds'
+        'success' => false,
+        'message' => 'Insufficient available funds',
+        'backend_available' => $available,
+        'backend_funds' => $funds,
+        'backend_totalPL' => $totalPL,
+        'backend_totalMargin' => $totalMargin,
+        'received_margin' => $margin,
+        'deals' => $deals
         ]);
         exit;
     }
@@ -83,7 +89,16 @@ try {
     ]);
 
     $conn->commit();
-    echo json_encode(['success' => true, 'message' => 'Deal successfully placed!']);
+      echo json_encode([
+        'success' => true,
+        'message' => 'Deal placed succesfully!',
+        'backend_available' => $available,
+        'backend_funds' => $funds,
+        'backend_totalPL' => $totalPL,
+        'backend_totalMargin' => $totalMargin,
+        'received_margin' => $margin,
+        'deals' => $deals
+    ]);
 
 } catch (Exception $e) {
     $conn->rollBack();
@@ -100,4 +115,68 @@ function getLatestPrice($symbol) {
     $data = json_decode($json, true);
     return isset($data['price']) ? floatval($data['price']) : 0;
 }
+
+
+function calculatePL($symbol, $size, $opening, $latest) {
+
+    // Forex
+    $forexSpecs = [
+        "EUR/USD" => ["lotSize" => 100000, "quote" => "USD"],
+        "USD/JPY" => ["lotSize" => 100000, "quote" => "JPY"],
+        "GBP/USD" => ["lotSize" => 100000, "quote" => "USD"],
+        "AUD/USD" => ["lotSize" => 100000, "quote" => "USD"],
+        "NZD/USD" => ["lotSize" => 100000, "quote" => "USD"],
+        "USD/CAD" => ["lotSize" => 100000, "quote" => "CAD"],
+        "USD/CHF" => ["lotSize" => 100000, "quote" => "CHF"]
+    ];
+
+    $commodityLotSizes = [
+        "WTI/USD" => 1000,
+        "XBR/USD" => 1000,
+        "XAU/USD" => 100,
+        "XAG/USD" => 5000,
+        "XPD/USD" => 100,
+        "XPT/USD" => 100,
+        "LMAHDS03" => 25,
+        "HG1" => 25000,
+        "NG/USD" => 10000,
+        "KC1" => 37500,
+        "CC1" => 10,
+        "SB1" => 112000,
+        "W_1" => 5000,
+        "S_1" => 5000
+    ];
+
+    $stocks = ["AAPL","GOOG","AMZN","MSFT","NVDA","META","TSLA","BRK.B","JPM","WMT","V","LLY","ORCL","MA","NFLX","XOM","JNJ","COST","HD","PLTR","ABBV","PG","BAC","CVX","KO","TMUS","GE","BABA","UNH","AMD","PM","CSCO","WFC","CRM","MS","ABT"];
+
+    // 1. FOREX
+    if (isset($forexSpecs[$symbol])) {
+        $lotSize = $forexSpecs[$symbol]["lotSize"];
+
+        $pl = ($latest - $opening) * $lotSize * $size;
+
+        // Ako je USD base currency → konverzija PL u USD
+        if (str_starts_with($symbol, "USD/")) {
+            $pl = $pl / $latest;
+        }
+
+        return $pl;
+    }
+
+    // 2. Commodities
+    if (isset($commodityLotSizes[$symbol])) {
+        $lotSize = $commodityLotSizes[$symbol];
+        return ($latest - $opening) * $lotSize * $size;
+    }
+
+    // 3. Stocks
+    if (in_array($symbol, $stocks)) {
+        return ($latest - $opening) * 100 * $size;
+    }
+
+    // 4. Crypto (default)
+    return ($latest - $opening) * abs($size) * 0.1;
+}
+
 ?>
+

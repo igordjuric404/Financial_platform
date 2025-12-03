@@ -244,7 +244,7 @@ $formattedAdjustedBalance = number_format($balanceWithAdjustment, 2, '.', ',');
                         <div class="place-deal-container">
                             <button id="place-order-button">Place order</button>
                         </div>
-                        <div id="place-deal-error" class="place-deal-error"></div>
+                        <div id="place-deal-error-order" class="place-deal-error"></div>
                     </div>
                 </div>
             </div>
