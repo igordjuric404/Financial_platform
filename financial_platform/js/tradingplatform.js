@@ -87,6 +87,15 @@ $(document).ready(function () {
         }, 5000);
     }
 
+    function showPlaceDealErrorOrder(message) {
+        const errorDiv = $('#place-deal-error-order');
+        errorDiv.text(message).fadeIn(200);
+
+        setTimeout(() => {
+            errorDiv.fadeOut(200);
+        }, 5000);
+    }
+
     if (localStorage.getItem('positionsVisible') === 'true') {
         $('#positionsOverlay').show();
     } else {
@@ -409,7 +418,7 @@ $(document).ready(function () {
     }
 
     socket.onopen = function(event) {
-        console.log("Povezan sa serverom!");
+        console.log("Connected to websocket!");
 
         const request = {
             action: 'subscribe',
@@ -494,7 +503,6 @@ $(document).ready(function () {
             cryptoPrices[symbol] = {};
         }
 
-
         const prevPrice = parseFloat(cryptoPrices[symbol].price) || price;
         const buyPrice = price * (1 + spreadPercent / 2);
         const sellPrice = price * (1 - spreadPercent / 2);
@@ -535,8 +543,6 @@ $(document).ready(function () {
         selectedSymbol = symbol;
 
         const initialPrice = cryptoPrices[symbol]?.price;
-        console.log("Clicked symbol: ", symbol);
-        console.log("Initial price: ", initialPrice);
 
         if (initialPrice) {
             currentPrice = parseFloat(initialPrice);
@@ -544,21 +550,16 @@ $(document).ready(function () {
         } else {
             console.log("Cena za simbol nije dostupna još uvek, čekam WebSocket podatke...");
         }
-        console.log("asdadadsadadadsa" + symbol);
         showChartForSymbol(symbol);
     });
 
 
     function updatePricesBasedOnSize() {
         const size = parseFloat($('#size-number').val()) || 0;
-        console.log("OVOJEAAAASDADSDS" + size);
-        console.log("Jebenicurrent" + currentPrice);
 
         if (currentPrice > 0) {
             const sellPrice = (currentPrice - size).toFixed(2);
-            console.log(sellPrice);
             const buyPrice = (currentPrice + size).toFixed(2);
-            console.log(buyPrice);
 
             $('#sellPrice').text(`$${sellPrice}`);
             $('#buyPrice').text(`$${buyPrice}`);
@@ -566,7 +567,6 @@ $(document).ready(function () {
     }
 
     $('#size-number').on('input', function() {
-        console.log($('#size-number').val());
         updatePricesBasedOnSize();
     });
 
@@ -691,7 +691,30 @@ $(document).ready(function () {
             return;
         }
 
-        let result = sizeInput * openingPrice * 0.1;
+        let result = 0;
+
+        if (!isNaN(sizeInput) && !isNaN(openingPrice)) {
+
+            if (forexSpecs[selectedSymbol]) {
+
+                result = sizeInput * forexSpecs[selectedSymbol].lotSize * openingPrice * 0.01;
+
+                if (selectedSymbol.startsWith("USD/"))
+                    result /= openingPrice;
+
+            } else if (commodityLotSizes[selectedSymbol]) {
+
+                result = sizeInput * commodityLotSizes[selectedSymbol] * openingPrice * 0.03;
+
+            } else if (stockSymbols.includes(selectedSymbol)) {
+
+                result = sizeInput * 100 * openingPrice * 0.05;
+
+            } else {
+
+                result = Math.abs(sizeInput) * openingPrice * 0.1;
+            }
+        }
         $('#margin-text').text("US$" + result.toFixed(2));
         $('#res-pos').text("+" + sizeInput);
 
@@ -704,6 +727,11 @@ $(document).ready(function () {
             let stopAt = parseFloat($('#stop-deal').val()) || 0;
             let limitAt = parseFloat($('#limit-deal').val()) || 0;
 
+            if(sizeInput == 0){
+                showPlaceDealError("Size cannot be 0.");
+                return;
+            }
+
             if(stopAt != 0 && stopAt > openingPrice){
                 showPlaceDealError("Stop loss cannot be higher than current price.");
                 return;
@@ -711,6 +739,11 @@ $(document).ready(function () {
 
             if(limitAt != 0 && limitAt < openingPrice){
                 showPlaceDealError("Take profit cannot be lower than current price.");
+                return;
+            }
+
+            if (result > available) {
+                showPlaceDealError("Insufficient available funds");
                 return;
             }
 
@@ -751,31 +784,86 @@ $(document).ready(function () {
     });
 
     $('#place-order-button').on('click', function() {
-
         let userId = $('body').data('user-id');
         let sizeInput = parseFloat($('#order-size-number').val()) || 0;
         let orderPrice = parseFloat($('#order-price').val()) || 0;
         let stopAt = parseFloat($('#stop-order').val()) || 0;
         let limitAt = parseFloat($('#limit-order').val()) || 0;
 
+        let availableText = $('#user-available').text().trim();
+        let available = parseFloat(availableText.replace(/[^0-9.-]+/g, "")) || 0;
+
         if (!selectedCell || !selectedSymbol) {
-            alert("Please select BUY or SELL.");
+            showPlaceDealErrorOrder("Please select BUY or SELL.");
             return;
         }
 
         if (!orderPrice || orderPrice <= 0) {
-            alert("Order price must be entered.");
+            showPlaceDealErrorOrder("Order price must be entered.");
             return;
         }
 
-        let margin = sizeInput * orderPrice * 0.1;
+        // -----------------------------------------
+        // STOP LOSS / TAKE PROFIT PROVERE
+        // -----------------------------------------
+        if (stopAt !== 0 && stopAt > orderPrice) {
+            showPlaceDealErrorOrder("Stop loss cannot be higher than order price.");
+            return;
+        }
 
+        if (limitAt !== 0 && limitAt < orderPrice) {
+            showPlaceDealErrorOrder("Take profit cannot be lower than order price.");
+            return;
+        }
+
+        // -----------------------------------------
+        // MARGIN KALKULACIJA (ISTA KAO PLACE DEAL)
+        // -----------------------------------------
+        let margin = 0;
+
+        if (!isNaN(sizeInput) && !isNaN(orderPrice)) {
+
+            if (forexSpecs[selectedSymbol]) {
+
+                margin = sizeInput * forexSpecs[selectedSymbol].lotSize * orderPrice * 0.01;
+
+                if (selectedSymbol.startsWith("USD/"))
+                    margin /= orderPrice;
+
+            } else if (commodityLotSizes[selectedSymbol]) {
+
+                margin = sizeInput * commodityLotSizes[selectedSymbol] * orderPrice * 0.03;
+
+            } else if (stockSymbols.includes(selectedSymbol)) {
+
+                margin = sizeInput * 100 * orderPrice * 0.05;
+
+            } else {
+
+                margin = Math.abs(sizeInput) * orderPrice * 0.1;
+            }
+        }
+
+        // -----------------------------------------
+        // AVAILABLE FUNDS PROVERA
+        // -----------------------------------------
+        if (margin > available) {
+            showPlaceDealErrorOrder("Insufficient available funds");
+            return;
+        }
+
+        // -----------------------------------------
+        // FINAL SIZE I TRANSACTION TYPE
+        // -----------------------------------------
         let transactionType = selectedCell === 'buy' ? 'buy' : 'sell';
 
         let finalSize = selectedCell === 'buy'
             ? sizeInput
             : -Math.abs(sizeInput);
 
+        // -----------------------------------------
+        // AJAX — SLANJE ORDERA
+        // -----------------------------------------
         $.ajax({
             url: 'php/processOrder.php',
             method: 'POST',
@@ -790,20 +878,25 @@ $(document).ready(function () {
                 limit_at: limitAt
             },
             success: function(response) {
+                try {
+                    const data = JSON.parse(response);
 
-                localStorage.setItem('ordersVisible', 'true');
-
-                location.reload();
+                    if (data.success) {
+                        localStorage.setItem('ordersVisible', 'true');
+                        location.reload();
+                    } else {
+                        showPlaceDealErrorOrder("Order rejected.");
+                    }
+                } catch (e) {
+                    showPlaceDealErrorOrder("Server response error.");
+                }
             },
             error: function(xhr, status, error) {
-                console.log("Order error:", error);
-                alert("Error processing order.");
+                showPlaceDealError("Error processing order.");
             }
         });
 
     });
-
-
 
      function loadDeals() {
         $.ajax({
@@ -850,7 +943,7 @@ $(document).ready(function () {
 
             const formattedSize = Math.abs(deal.size).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            const formattedOpeningPrice = parseFloat(deal.opening).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const formattedOpeningPrice = parseFloat(deal.opening).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
 
             const formattedLatestPrice = latestPrice === '-' ? latestPrice : parseFloat(latestPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -889,10 +982,9 @@ $(document).ready(function () {
         const symbol = $(this).data('symbol');
         const size = parseFloat(row.data('size'));
         const opening = parseFloat(row.data('opening'));
-        const latestPrice = parseFloat(row.find('.latest-price').text()) || 0;
-
-        console.log("Selling position with deal_id: " + dealId);
-        console.log("Row data: ", row);
+        const latestPrice = parseFloat(
+            row.find('.latest-price').text().replace(/,/g, '')
+        ) || 0;
 
         $.ajax({
             url: 'php/closePosition.php',
@@ -906,7 +998,6 @@ $(document).ready(function () {
             },
             success: function(response) {
                 const responseJson = JSON.parse(response);
-                console.log("Response: ", responseJson);
 
                 localStorage.setItem('positionsVisible', 'true');
 
@@ -926,10 +1017,9 @@ $(document).ready(function () {
         const symbol = $(this).data('symbol');
         const size = parseFloat(row.data('size'));
         const opening = parseFloat(row.data('opening'));
-        const latestPrice = parseFloat(row.find('.latest-price').text()) || 0;
-
-        console.log("Selling position with deal_id: " + dealId);
-        console.log("Row data: ", row);
+        const latestPrice = parseFloat(
+            row.find('.latest-price').text().replace(/,/g, '')
+        ) || 0;
 
         $.ajax({
             url: 'php/closePosition.php',
@@ -943,7 +1033,6 @@ $(document).ready(function () {
             },
             success: function(response) {
                 const responseJson = JSON.parse(response);
-                console.log("Response: ", responseJson);
 
                 localStorage.setItem('positionsVisible', 'true');
 
@@ -1313,7 +1402,7 @@ $(document).ready(function () {
 
             const formattedPL = profitLoss >= 0 ? `+${profitLoss.toFixed(2)}` : profitLoss.toFixed(2);
             const formattedSize = Math.abs(size).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            const formattedOpening = openingPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const formattedOpening = openingPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
             const formattedLatest = rowLatest.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
             const formattedStop = stop_at && parseFloat(stop_at) !== 0 ? parseFloat(stop_at).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A';
@@ -1410,16 +1499,12 @@ $(document).ready(function () {
             url: 'php/getHistory.php',
             method: 'GET',
             success: function(response) {
-                console.log('Full Response:', response);
 
                 if (typeof response === "string") {
                     response = JSON.parse(response);
                 }
 
-                console.log('Parsed Response:', response);
-
                 if (response.deals && Array.isArray(response.deals)) {
-                    console.log('Deals:', response.deals);
                     generateHistoryTable(response.deals);
                 } else {
                     $('#historyOverlay .container').html(`
@@ -1520,14 +1605,12 @@ $(document).ready(function () {
             url: 'php/getOrders.php',
             method: 'GET',
             success: function(response) {
-                console.log('Orders Response:', response);
 
                 if (typeof response === "string") {
                     response = JSON.parse(response);
                 }
 
                 if (response.orders && Array.isArray(response.orders)) {
-                    console.log('Orders:', response.orders);
                     generateOrdersTable(response.orders);
                 } else {
                     $('#ordersOverlay .container').html(`
