@@ -986,6 +986,12 @@ $(document).ready(function () {
             row.find('.latest-price').text().replace(/,/g, '')
         ) || 0;
 
+        console.log('Deal ID:', dealId);
+        console.log('Symbol:', symbol);
+        console.log('Size:', size);
+        console.log('Opening Price:', opening);
+        console.log('Latest Price:', latestPrice);
+
         $.ajax({
             url: 'php/closePosition.php',
             method: 'POST',
@@ -1009,7 +1015,6 @@ $(document).ready(function () {
             }
         });
     });
-
 
     $('#positionsTableContainer').on('click', '.sell-btn', function() {
         const dealId = $(this).data('deal-id');
@@ -1021,6 +1026,12 @@ $(document).ready(function () {
             row.find('.latest-price').text().replace(/,/g, '')
         ) || 0;
 
+        console.log('Deal ID:', dealId);
+        console.log('Symbol:', symbol);
+        console.log('Size:', size);
+        console.log('Opening Price:', opening);
+        console.log('Latest Price:', latestPrice);
+
         $.ajax({
             url: 'php/closePosition.php',
             method: 'POST',
@@ -1044,6 +1055,7 @@ $(document).ready(function () {
             }
         });
     });
+
 
     function updateDealsTableLive(symbol, latestPrice) {
         let totalPL = 0;
@@ -1243,9 +1255,10 @@ $(document).ready(function () {
                         if (!isNaN(size) && !isNaN(opening)) {
 
                             if (forexSpecs[rowSymbol]) {
-                            
+
+                                let roundedLatest = rowLatest.toFixed(4);
                                 const lotSize = forexSpecs[rowSymbol].lotSize;
-                                const diff = rowLatest - opening;
+                                const diff = roundedLatest - opening;
                                 let pl = diff * lotSize * size;
 
                                 if (rowSymbol.startsWith("USD/")) {
@@ -1394,7 +1407,33 @@ $(document).ready(function () {
             // Izračunaj profit/loss
             let profitLoss = 0;
             if (!isNaN(size) && !isNaN(openingPrice)) {
-                profitLoss = (rowLatest - openingPrice) * Math.abs(size) * 0.1;
+
+                if (forexSpecs[symbol]) {
+                
+                    const lotSize = forexSpecs[symbol].lotSize;
+                    const diff = rowLatest - opening;
+                    let pl = diff * lotSize * size;
+
+                    if (symbol.startsWith("USD/")) {
+                        pl = pl / rowLatest;
+                    }
+
+                    profitLoss = pl;
+
+                } else if (commodityLotSizes[symbol]) {
+                    const lotSize = commodityLotSizes[symbol];
+                    const diff = rowLatest - opening;
+                    profitLoss = diff * lotSize * size;
+
+                } else if (stockSymbols.includes(symbol)) {
+                    const lotSize = 100;
+                    const diff = rowLatest - opening;
+                    profitLoss = diff * lotSize * size;
+
+                } else {
+                    profitLoss = (rowLatest - opening) * Math.abs(size) * 0.1;
+                }
+
             }
 
             totalPL += profitLoss;
@@ -1403,7 +1442,7 @@ $(document).ready(function () {
             const formattedPL = profitLoss >= 0 ? `+${profitLoss.toFixed(2)}` : profitLoss.toFixed(2);
             const formattedSize = Math.abs(size).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             const formattedOpening = openingPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
-            const formattedLatest = rowLatest.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const formattedLatest = rowLatest.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
 
             const formattedStop = stop_at && parseFloat(stop_at) !== 0 ? parseFloat(stop_at).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A';
             const formattedLimit = limit_at && parseFloat(limit_at) !== 0 ? parseFloat(limit_at).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A';
