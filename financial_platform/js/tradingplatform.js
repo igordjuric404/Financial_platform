@@ -489,10 +489,25 @@ $(document).ready(function () {
     // Socket handlers are now set up in setupSocketHandlers() function above
 
     function handleSocketData(data) {
-        if (data.symbol && data.price) {
+        // Handle individual price update: {symbol: "BTC/USD", price: 50000}
+        if (data.symbol && data.price !== undefined) {
             updateCryptoPrice(data.symbol, parseFloat(data.price), selectedSymbol);
+            return;
         }
 
+        // Handle bulk price object: {"BTC/USD": 50000, "ETH/USD": 3000, ...}
+        if (typeof data === 'object' && !data.symbol && !data.action) {
+            console.log("📦 Received bulk price data, processing", Object.keys(data).length, "prices");
+            Object.keys(data).forEach(symbol => {
+                const price = parseFloat(data[symbol]);
+                if (!isNaN(price)) {
+                    updateCryptoPrice(symbol, price, selectedSymbol);
+                }
+            });
+            return;
+        }
+
+        // Handle action messages
         if (data.action === 'update_table') {
             loadDeals();
             loadOrders();

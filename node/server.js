@@ -219,9 +219,16 @@ wss.on('connection', function connection(ws) {
     const clientCount = wss.clients.size;
     console.log(`🔌 [CLIENT] New client connected (total: ${clientCount})`);
 
-    // Send current cached prices immediately
-    ws.send(JSON.stringify(lastPrices));
-    console.log(`📤 [CLIENT] Sent ${Object.keys(lastPrices).length} cached prices to new client`);
+    // Send current cached prices immediately as individual messages
+    const priceCount = Object.keys(lastPrices).length;
+    if (priceCount > 0) {
+        console.log(`📤 [CLIENT] Sending ${priceCount} cached prices to new client`);
+        Object.keys(lastPrices).forEach(symbol => {
+            ws.send(JSON.stringify({ symbol, price: lastPrices[symbol] }));
+        });
+    } else {
+        console.log(`⚠️ [CLIENT] No cached prices available yet`);
+    }
 
     ws.on('message', function incoming(message) {
         console.log('📨 [CLIENT] Message received:', message.toString());
