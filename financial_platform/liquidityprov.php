@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
-    <title>Responsive navbar</title>
+    <title>Alpine Markets</title>
     <link rel="stylesheet" href="homestyle.css">
 </head>
 
