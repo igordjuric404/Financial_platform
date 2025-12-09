@@ -5,18 +5,87 @@ $(document).ready(function () {
     // Dynamic WebSocket URL based on current protocol and hostname
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsHost = window.location.hostname;
-    let socket = new WebSocket(`${wsProtocol}//${wsHost}/ws`);
+    const wsPort = window.location.port ? `:${window.location.port}` : '';
+    // Try /ws path first (for reverse proxy), fallback to port 8080 if needed
+    const wsUrl = `${wsProtocol}//${wsHost}${wsPort}/ws`;
     
-    socket.onopen = function() {
-        // WebSocket connected
-    };
+    console.log("🔌 Attempting WebSocket connection to:", wsUrl);
     
+    function setupSocketHandlers(socket) {
+        socket.onopen = function(event) {
+            console.log("✅ WebSocket CONNECTED successfully!");
+            console.log("📡 Sending subscribe request...");
+
+            const request = {
+                action: 'subscribe',
+                params: {
+                    symbols: 'BTC/USD,ETH/USD,LTC/USD,XRP/USD,SOL/USD,EUR/USD,USD/JPY,AAPL,GOOG,AMZN,GOLD,SILVER,OIL'
+                }
+            };
+            socket.send(JSON.stringify(request));
+            console.log("📤 Subscribe request sent:", request);
+        };
+
+        socket.onmessage = function(event) {
+            console.log("📨 WebSocket message received:", event.data);
+            let data;
+
+            if (typeof event.data === "string") {
+                if (event.data.trim().startsWith('{') || event.data.trim().startsWith('[')) {
+                    try {
+                        data = JSON.parse(event.data);
+                        console.log("✅ Parsed WebSocket data:", data);
+                        handleSocketData(data);
+                    } catch (e) {
+                        console.error("❌ Error parsing WebSocket data:", e);
+                    }
+                }
+            } else if (event.data instanceof Blob) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    try {
+                        const blobData = reader.result;
+                        data = JSON.parse(blobData);
+                        handleSocketData(data);
+                    } catch (e) {
+                        console.error("❌ Error parsing Blob data:", e);
+                    }
+                };
+                reader.readAsText(event.data);
+            }
+        };
+
+        socket.onerror = function(error) {
+            console.error("❌ WebSocket ERROR in handler:", error);
+        };
+
+        socket.onclose = function(event) {
+            console.error("🔴 WebSocket CLOSED:", event.code, event.reason);
+            if (event.code !== 1000) { // Not a normal closure
+                console.log("⚠️ Unexpected WebSocket closure. Code:", event.code);
+            }
+        };
+    }
+    
+    // Create socket and setup handlers
+    let socket = new WebSocket(wsUrl);
+    let fallbackAttempted = false;
+    
+    // Setup initial handlers
+    setupSocketHandlers(socket);
+    
+    // Enhanced error handler with fallback (overrides the one in setupSocketHandlers)
     socket.onerror = function(error) {
-        console.error("WebSocket ERROR:", error);
-    };
-    
-    socket.onclose = function(event) {
-        console.error("WebSocket CLOSED:", event.code, event.reason);
+        console.error("❌ WebSocket ERROR:", error);
+        console.error("Failed to connect to:", wsUrl);
+        // Try fallback to port 8080 if /ws fails (only once)
+        if (!wsUrl.includes(':8080') && !fallbackAttempted) {
+            fallbackAttempted = true;
+            console.log("🔄 Attempting fallback connection to port 8080...");
+            const fallbackUrl = `${wsProtocol}//${wsHost}:8080`;
+            socket = new WebSocket(fallbackUrl);
+            setupSocketHandlers(socket);
+        }
     };
     
     let cryptoPrices = {}; 
@@ -417,44 +486,7 @@ $(document).ready(function () {
         }
     }
 
-    socket.onopen = function(event) {
-        console.log("Connected to websocket!");
-
-        const request = {
-            action: 'subscribe',
-            params: {
-                symbols: 'BTC/USD,ETH/USD,LTC/USD,XRP/USD,SOL/USD,EUR/USD,USD/JPY,AAPL,GOOG,AMZN,GOLD,SILVER,OIL'  // Dodaj simbole za crypto
-            }
-        };
-        socket.send(JSON.stringify(request));
-    };
-
-    socket.onmessage = function(event) {
-        let data;
-
-        if (typeof event.data === "string") {
-            if (event.data.trim().startsWith('{') || event.data.trim().startsWith('[')) {
-                try {
-                    data = JSON.parse(event.data);
-                    handleSocketData(data);
-                } catch (e) {
-                    console.error("Error parsing WebSocket data:", e);
-                }
-            }
-        } else if (event.data instanceof Blob) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                try {
-                    const blobData = reader.result;
-                    data = JSON.parse(blobData);
-                    handleSocketData(data);
-                } catch (e) {
-                    console.error("Error parsing Blob data:", e);
-                }
-            };
-            reader.readAsText(event.data);
-        }
-    };
+    // Socket handlers are now set up in setupSocketHandlers() function above
 
     function handleSocketData(data) {
         if (data.symbol && data.price) {
