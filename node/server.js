@@ -6,10 +6,7 @@ const http = require('http');
 const apiKey = '58102220f146405c939ceec954eab48e';
 const wsUrl = `wss://ws.twelvedata.com/v1/quotes/price?apikey=${apiKey}`;
 
-// HTTP server for localhost only (Apache proxies to this)
-const server = http.createServer();
-const wss = new WebSocket.Server({ server });
-
+const wss = new WebSocket.Server({ port: 8080 });
 const twelvedataWs = new WebSocket(wsUrl);
 
 const db = mysql.createConnection({
@@ -35,12 +32,12 @@ twelvedataWs.on('open', function open() {
     const request = {
         action: 'subscribe',
         params: {
-            symbols: 'BTC/USD,ETH/USD,SOL/USD,DOGE/USD,XRP/USD,ADA/USD,LTC/USD,XLM/USD,LINK/USD,EUR/USD,USD/JPY,GBP/USD,USD/CAD,USD/CHF,AUD/USD,NZD/USD,AAPL,GOOG,AMZN,MSFT,NVDA,META,TSLA,BRK.B,JPM,WMT,V,LLY,ORCL,MA,NFLX,XOM,JNJ,COST,HD,PLTR,ABBV,PG,BAC,CVX,KO,TMUS,GE,BABA,UNH,AMD,PM,CSCO,WFC,CRM,MS,ABT,CL1,CO1'
+            symbols: 'BTC/USD,ETH/USD,SOL/USD,DOGE/USD,XRP/USD,ADA/USD,LTC/USD,XLM/USD,LINK/USD,EUR/USD,USD/JPY,GBP/USD,USD/CAD,USD/CHF,AUD/USD,NZD/USD,AAPL,GOOG,AMZN,MSFT,NVDA,META,TSLA,BRK.B,JPM,WMT,V,LLY,ORCL,MA,NFLX,XOM,JNJ,COST,HD,PLTR,ABBV,PG,BAC,CVX,KO,TMUS,GE,BABA,UNH,AMD,PM,CSCO,WFC,CRM,MS,ABT,XAU/USD,XAG/USD,WTI/USD,XBR/USD,XPD/USD,XPT/USD,LMAHDS03,HG1,NG/USD,KC1,CC1,SB1,W_1,S_1'
         }
     };
 
     twelvedataWs.send(JSON.stringify(request));
-    console.log('📤 [TWELVEDATA] Subscription request sent for', Object.keys(request.params.symbols.split(',')).length, 'symbols');
+    console.log('📤 [TWELVEDATA] Subscription request sent for', request.params.symbols.split(',').length, 'symbols');
 });
 
 let priceUpdateCount = 0;
@@ -249,16 +246,13 @@ twelvedataWs.on('close', () => {
     // Note: In production, you should implement reconnection logic here
 });
 
-// Start server on localhost:8080
-server.listen(8080, '127.0.0.1', () => {
-    console.log('');
-    console.log('='.repeat(60));
-    console.log('🚀 WebSocket Server Started');
-    console.log('='.repeat(60));
-    console.log('   • Listening: http://127.0.0.1:8080');
-    console.log('   • Public Path: wss://alpinecapitalmarkets.com/ws');
-    console.log('   • Database: financial_platform_new');
-    console.log('   • TwelveData: WebSocket subscription active');
-    console.log('='.repeat(60));
-    console.log('');
-});
+console.log('');
+console.log('='.repeat(60));
+console.log('🚀 WebSocket Server Started');
+console.log('='.repeat(60));
+console.log('   • Listening: ws://127.0.0.1:8080');
+console.log('   • Public Path: wss://alpinecapitalmarkets.com/ws');
+console.log('   • Database: financial_platform_new');
+console.log('   • TwelveData: WebSocket subscription active');
+console.log('='.repeat(60));
+console.log('');

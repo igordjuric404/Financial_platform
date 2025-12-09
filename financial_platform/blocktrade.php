@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
-    <title>Responsive navbar</title>
+    <title>Alpine Markets</title>
     <link rel="stylesheet" href="homestyle.css">
 </head>
 
@@ -55,8 +55,8 @@
         <section class="header container" id="block-desk2">
             <div class="contact-block">
                 <h1 style="font-size: 25px;">Want to execute Block Trade?<br>Contact us today:</h1>
-                <h4>Desk Phone:</h4>
-                <h4>Desk E-mail:</h4>
+                <h4>Desk Phone: +447450098234</h4>
+                <h4>Desk E-mail: support@alpinemarkets.com</h4>
             </div>
         </section>
 
