@@ -232,6 +232,23 @@ wss.on('connection', function connection(ws) {
 
     ws.on('message', function incoming(message) {
         console.log('📨 [CLIENT] Message received:', message.toString());
+        
+        try {
+            const data = JSON.parse(message.toString());
+            
+            // Handle subscribe action
+            if (data.action === 'subscribe' && data.params && data.params.symbols) {
+                console.log(`✅ [CLIENT] Subscribe request processed for symbols: ${data.params.symbols}`);
+                // Send acknowledgment
+                ws.send(JSON.stringify({
+                    action: 'subscribed',
+                    status: 'success',
+                    symbols: data.params.symbols.split(',')
+                }));
+            }
+        } catch (error) {
+            console.error('❌ [CLIENT] Error parsing message:', error.message);
+        }
     });
 
     ws.on('close', function close() {
