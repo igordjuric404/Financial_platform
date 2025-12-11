@@ -27,6 +27,13 @@ $(document).ready(function () {
         };
 
         socket.onmessage = function(event) {
+            // Handle binary ping frames (keepalive)
+            if (event.data instanceof ArrayBuffer) {
+                // This is a ping frame, respond with pong
+                socket.send(new Uint8Array(event.data));
+                return;
+            }
+            
             console.log("📨 WebSocket message received:", event.data);
             let data;
 
@@ -35,6 +42,12 @@ $(document).ready(function () {
                     try {
                         data = JSON.parse(event.data);
                         console.log("✅ Parsed WebSocket data:", data);
+                        
+                        // Handle pong response
+                        if (data.action === 'pong') {
+                            return; // Just acknowledge, don't process
+                        }
+                        
                         handleSocketData(data);
                     } catch (e) {
                         console.error("❌ Error parsing WebSocket data:", e);
@@ -63,6 +76,14 @@ $(document).ready(function () {
             console.error("🔴 WebSocket CLOSED:", event.code, event.reason);
             if (event.code !== 1000) { // Not a normal closure
                 console.log("⚠️ Unexpected WebSocket closure. Code:", event.code);
+                // Attempt to reconnect after a delay
+                setTimeout(function() {
+                    if (!socket || socket.readyState === WebSocket.CLOSED) {
+                        console.log("🔄 Attempting to reconnect WebSocket...");
+                        socket = new WebSocket(wsUrl);
+                        setupSocketHandlers(socket);
+                    }
+                }, 3000);
             }
         };
     }

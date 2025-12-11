@@ -215,23 +215,43 @@ function executeOrder(order) {
 }
 
 // ====================== WEBSOCKET SERVER ======================
-wss.on('connection', function connection(ws) {
+wss.on('connection', function connection(ws, req) {
     const clientCount = wss.clients.size;
-    console.log(`🔌 [CLIENT] New client connected (total: ${clientCount})`);
+    const clientId = req.headers['sec-websocket-key'] || Math.random().toString(36).substring(7);
+    console.log(`🔌 [CLIENT] New client connected (total: ${clientCount}, ID: ${clientId.substring(0, 8)})`);
 
+    // Mark connection as alive
+    ws.isAlive = true;
+    
     // Send current cached prices immediately as individual messages
     const priceCount = Object.keys(lastPrices).length;
     if (priceCount > 0) {
         console.log(`📤 [CLIENT] Sending ${priceCount} cached prices to new client`);
-        Object.keys(lastPrices).forEach(symbol => {
-            ws.send(JSON.stringify({ symbol, price: lastPrices[symbol] }));
-        });
+        // Send prices in batches to avoid overwhelming the connection
+        const symbols = Object.keys(lastPrices);
+        let index = 0;
+        const sendBatch = () => {
+            const batch = symbols.slice(index, index + 10);
+            batch.forEach(symbol => {
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ symbol, price: lastPrices[symbol] }));
+                }
+            });
+            index += 10;
+            if (index < symbols.length && ws.readyState === WebSocket.OPEN) {
+                setTimeout(sendBatch, 10); // Small delay between batches
+            }
+        };
+        sendBatch();
     } else {
         console.log(`⚠️ [CLIENT] No cached prices available yet`);
     }
 
     ws.on('message', function incoming(message) {
         console.log('📨 [CLIENT] Message received:', message.toString());
+        
+        // Mark as alive on any message
+        ws.isAlive = true;
         
         try {
             const data = JSON.parse(message.toString());
@@ -240,24 +260,59 @@ wss.on('connection', function connection(ws) {
             if (data.action === 'subscribe' && data.params && data.params.symbols) {
                 console.log(`✅ [CLIENT] Subscribe request processed for symbols: ${data.params.symbols}`);
                 // Send acknowledgment
-                ws.send(JSON.stringify({
-                    action: 'subscribed',
-                    status: 'success',
-                    symbols: data.params.symbols.split(',')
-                }));
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({
+                        action: 'subscribed',
+                        status: 'success',
+                        symbols: data.params.symbols.split(',')
+                    }));
+                }
+            }
+            
+            // Handle pong response
+            if (data.action === 'pong') {
+                ws.isAlive = true;
             }
         } catch (error) {
             console.error('❌ [CLIENT] Error parsing message:', error.message);
         }
     });
 
-    ws.on('close', function close() {
-        console.log(`🔌 [CLIENT] Client disconnected (remaining: ${wss.clients.size})`);
+    ws.on('pong', function pong() {
+        ws.isAlive = true;
+    });
+
+    ws.on('close', function close(code, reason) {
+        console.log(`🔌 [CLIENT] Client disconnected (remaining: ${wss.clients.size}, code: ${code}, reason: ${reason || 'none'})`);
     });
 
     ws.on('error', function error(err) {
         console.error('❌ [CLIENT] WebSocket error:', err.message);
     });
+});
+
+// Ping all clients every 30 seconds to keep connections alive
+const pingInterval = setInterval(() => {
+    wss.clients.forEach(function each(ws) {
+        if (ws.isAlive === false) {
+            console.log('💀 [CLIENT] Terminating dead connection');
+            return ws.terminate();
+        }
+        
+        ws.isAlive = false;
+        if (ws.readyState === WebSocket.OPEN) {
+            try {
+                ws.ping();
+            } catch (error) {
+                console.error('❌ [CLIENT] Error sending ping:', error.message);
+            }
+        }
+    });
+}, 30000);
+
+// Cleanup interval on server close
+wss.on('close', function close() {
+    clearInterval(pingInterval);
 });
 
 // Error handlers for TwelveData WebSocket
