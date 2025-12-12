@@ -269,9 +269,13 @@ wss.on('connection', function connection(ws, req) {
                 }
             }
             
-            // Handle pong response
-            if (data.action === 'pong') {
+            // Handle heartbeat response
+            if (data.action === 'heartbeat' || data.action === 'pong') {
                 ws.isAlive = true;
+                // Send heartbeat response
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ action: 'heartbeat_ack', timestamp: Date.now() }));
+                }
             }
         } catch (error) {
             console.error('❌ [CLIENT] Error parsing message:', error.message);
@@ -291,8 +295,14 @@ wss.on('connection', function connection(ws, req) {
     });
 });
 
-// Ping all clients every 30 seconds to keep connections alive
-const pingInterval = setInterval(() => {
+// Send heartbeat messages every 20 seconds to keep connections alive
+// Using JSON messages instead of ping frames because Cloudflare/proxies handle them better
+const heartbeatInterval = setInterval(() => {
+    const connectedClients = Array.from(wss.clients).filter(c => c.readyState === WebSocket.OPEN);
+    if (connectedClients.length > 0) {
+        console.log(`💓 [HEARTBEAT] Sending to ${connectedClients.length} client(s)`);
+    }
+    
     wss.clients.forEach(function each(ws) {
         if (ws.isAlive === false) {
             console.log('💀 [CLIENT] Terminating dead connection');
@@ -302,13 +312,15 @@ const pingInterval = setInterval(() => {
         ws.isAlive = false;
         if (ws.readyState === WebSocket.OPEN) {
             try {
-                ws.ping();
+                // Send JSON heartbeat instead of ping frame (works better through proxies)
+                ws.send(JSON.stringify({ action: 'heartbeat', timestamp: Date.now() }));
             } catch (error) {
-                console.error('❌ [CLIENT] Error sending ping:', error.message);
+                console.error('❌ [CLIENT] Error sending heartbeat:', error.message);
+                ws.isAlive = false;
             }
         }
     });
-}, 30000);
+}, 20000); // Every 20 seconds
 
 // Cleanup interval on server close
 wss.on('close', function close() {
