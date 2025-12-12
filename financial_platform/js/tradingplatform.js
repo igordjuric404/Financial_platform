@@ -43,8 +43,14 @@ $(document).ready(function () {
                         data = JSON.parse(event.data);
                         console.log("✅ Parsed WebSocket data:", data);
                         
-                        // Handle pong response
-                        if (data.action === 'pong') {
+                        // Handle heartbeat messages (keepalive)
+                        if (data.action === 'heartbeat') {
+                            // Respond to heartbeat to keep connection alive
+                            socket.send(JSON.stringify({ action: 'heartbeat_ack', timestamp: data.timestamp }));
+                            return; // Don't process heartbeat as data
+                        }
+                        
+                        if (data.action === 'heartbeat_ack' || data.action === 'pong') {
                             return; // Just acknowledge, don't process
                         }
                         
