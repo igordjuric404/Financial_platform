@@ -69,7 +69,14 @@ twelvedataWs.on('message', function incoming(data) {
             const connectedClients = Array.from(wss.clients).filter(c => c.readyState === WebSocket.OPEN).length;
             wss.clients.forEach(client => {
                 if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({ symbol, price: latestPrice }));
+                    try {
+                        client.send(JSON.stringify({ symbol, price: latestPrice }));
+                        // Update activity time when we successfully send data (price updates keep connection alive!)
+                        connectionActivity.set(client, Date.now());
+                    } catch (error) {
+                        console.error(`❌ [BROADCAST] Error sending to client:`, error.message);
+                        connectionActivity.delete(client);
+                    }
                 }
             });
             
@@ -248,10 +255,8 @@ wss.on('connection', function connection(ws, req) {
     }
 
     ws.on('message', function incoming(message) {
-        console.log('📨 [CLIENT] Message received:', message.toString());
-        
-        // Mark as alive on any message
-        ws.isAlive = true;
+        // Update activity time on ANY message received (including price updates, heartbeats, etc.)
+        connectionActivity.set(ws, Date.now());
         
         try {
             const data = JSON.parse(message.toString());
@@ -266,19 +271,26 @@ wss.on('connection', function connection(ws, req) {
                         status: 'success',
                         symbols: data.params.symbols.split(',')
                     }));
+                    connectionActivity.set(ws, Date.now()); // Update activity on send too
                 }
+                return;
             }
             
             // Handle heartbeat response
-            if (data.action === 'heartbeat' || data.action === 'pong') {
-                ws.isAlive = true;
-                // Send heartbeat response
-                if (ws.readyState === WebSocket.OPEN) {
-                    ws.send(JSON.stringify({ action: 'heartbeat_ack', timestamp: Date.now() }));
+            if (data.action === 'heartbeat' || data.action === 'heartbeat_ack' || data.action === 'pong') {
+                if (data.action === 'heartbeat_ack') {
+                    console.log(`💚 [HEARTBEAT] Received acknowledgment from client`);
                 }
+                // Send heartbeat acknowledgment if it was a heartbeat request (shouldn't happen, but handle it)
+                if (data.action === 'heartbeat' && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ action: 'heartbeat_ack', timestamp: data.timestamp }));
+                    connectionActivity.set(ws, Date.now());
+                }
+                return;
             }
         } catch (error) {
-            console.error('❌ [CLIENT] Error parsing message:', error.message);
+            // If it's not JSON, still update activity (could be binary data or other format)
+            connectionActivity.set(ws, Date.now());
         }
     });
 
@@ -288,6 +300,7 @@ wss.on('connection', function connection(ws, req) {
 
     ws.on('close', function close(code, reason) {
         console.log(`🔌 [CLIENT] Client disconnected (remaining: ${wss.clients.size}, code: ${code}, reason: ${reason || 'none'})`);
+        connectionActivity.delete(ws);
     });
 
     ws.on('error', function error(err) {
@@ -295,32 +308,49 @@ wss.on('connection', function connection(ws, req) {
     });
 });
 
-// Send heartbeat messages every 20 seconds to keep connections alive
+// Track last activity time for each connection
+const connectionActivity = new Map();
+
+// Send heartbeat messages every 10 seconds to keep connections alive
 // Using JSON messages instead of ping frames because Cloudflare/proxies handle them better
+// Track activity based on ANY message received OR successfully sent (price updates count!)
 const heartbeatInterval = setInterval(() => {
     const connectedClients = Array.from(wss.clients).filter(c => c.readyState === WebSocket.OPEN);
-    if (connectedClients.length > 0) {
-        console.log(`💓 [HEARTBEAT] Sending to ${connectedClients.length} client(s)`);
-    }
+    const now = Date.now();
     
     wss.clients.forEach(function each(ws) {
-        if (ws.isAlive === false) {
-            console.log('💀 [CLIENT] Terminating dead connection');
+        if (ws.readyState !== WebSocket.OPEN) {
+            return; // Skip closed connections
+        }
+        
+        const lastActivity = connectionActivity.get(ws) || now;
+        const timeSinceActivity = now - lastActivity;
+        
+        // If no activity for 60 seconds, terminate connection
+        if (timeSinceActivity > 60000) {
+            console.log(`💀 [CLIENT] Terminating dead connection (no activity for ${Math.round(timeSinceActivity/1000)}s)`);
+            connectionActivity.delete(ws);
             return ws.terminate();
         }
         
-        ws.isAlive = false;
-        if (ws.readyState === WebSocket.OPEN) {
-            try {
-                // Send JSON heartbeat instead of ping frame (works better through proxies)
-                ws.send(JSON.stringify({ action: 'heartbeat', timestamp: Date.now() }));
-            } catch (error) {
-                console.error('❌ [CLIENT] Error sending heartbeat:', error.message);
-                ws.isAlive = false;
-            }
+        try {
+            // Send JSON heartbeat to keep connection alive
+            ws.send(JSON.stringify({ action: 'heartbeat', timestamp: now }));
+            // Don't mark as dead - we'll check activity time instead
+        } catch (error) {
+            console.error('❌ [CLIENT] Error sending heartbeat:', error.message);
+            connectionActivity.delete(ws);
         }
     });
-}, 20000); // Every 20 seconds
+    
+    if (connectedClients.length > 0) {
+        const activeCount = Array.from(wss.clients).filter(c => {
+            const activity = connectionActivity.get(c);
+            return activity && (now - activity) < 60000 && c.readyState === WebSocket.OPEN;
+        }).length;
+        console.log(`💓 [HEARTBEAT] Sent to ${connectedClients.length} client(s), ${activeCount} with recent activity`);
+    }
+}, 10000); // Every 10 seconds
 
 // Cleanup interval on server close
 wss.on('close', function close() {

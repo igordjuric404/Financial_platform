@@ -26,6 +26,10 @@ $(document).ready(function () {
             console.log("📤 Subscribe request sent:", request);
         };
 
+        // Track message count for reduced logging
+        let messageCount = 0;
+        let lastLogTime = Date.now();
+        
         socket.onmessage = function(event) {
             // Handle binary ping frames (keepalive)
             if (event.data instanceof ArrayBuffer) {
@@ -34,19 +38,40 @@ $(document).ready(function () {
                 return;
             }
             
-            console.log("📨 WebSocket message received:", event.data);
+            messageCount++;
+            const now = Date.now();
+            const shouldLog = (messageCount % 50 === 0) || (now - lastLogTime > 30000); // Log every 50th message or every 30 seconds
+            
+            if (shouldLog) {
+                console.log(`📨 WebSocket message received (${messageCount} total):`, event.data);
+                lastLogTime = now;
+            }
+            
             let data;
 
             if (typeof event.data === "string") {
                 if (event.data.trim().startsWith('{') || event.data.trim().startsWith('[')) {
                     try {
                         data = JSON.parse(event.data);
-                        console.log("✅ Parsed WebSocket data:", data);
+                        
+                        if (shouldLog) {
+                            console.log("✅ Parsed WebSocket data:", data);
+                        }
                         
                         // Handle heartbeat messages (keepalive)
                         if (data.action === 'heartbeat') {
                             // Respond to heartbeat to keep connection alive
-                            socket.send(JSON.stringify({ action: 'heartbeat_ack', timestamp: data.timestamp }));
+                            if (shouldLog) {
+                                console.log("💓 [HEARTBEAT] Received, sending acknowledgment...");
+                            }
+                            try {
+                                socket.send(JSON.stringify({ action: 'heartbeat_ack', timestamp: data.timestamp }));
+                                if (shouldLog) {
+                                    console.log("✅ [HEARTBEAT] Acknowledgment sent");
+                                }
+                            } catch (error) {
+                                console.error("❌ [HEARTBEAT] Error sending acknowledgment:", error);
+                            }
                             return; // Don't process heartbeat as data
                         }
                         
@@ -85,7 +110,7 @@ $(document).ready(function () {
                 // Attempt to reconnect after a delay
                 setTimeout(function() {
                     if (!socket || socket.readyState === WebSocket.CLOSED) {
-                        console.log("🔄 Attempting to reconnect WebSocket...");
+                        console.log("🔄 Attempting to reconnect WebSocket after close...");
                         socket = new WebSocket(wsUrl);
                         setupSocketHandlers(socket);
                     }
@@ -97,6 +122,30 @@ $(document).ready(function () {
     // Create socket and setup handlers
     let socket = new WebSocket(wsUrl);
     let fallbackAttempted = false;
+    let reconnectTimeout = null;
+    
+    // Function to reconnect WebSocket
+    function reconnectWebSocket() {
+        // Clear any pending reconnection
+        if (reconnectTimeout) {
+            clearTimeout(reconnectTimeout);
+            reconnectTimeout = null;
+        }
+        
+        // Close existing connection if it exists
+        if (socket && socket.readyState !== WebSocket.CLOSED) {
+            console.log("🔄 Closing existing connection before reconnecting...");
+            socket.close();
+        }
+        
+        // Wait a moment then reconnect
+        reconnectTimeout = setTimeout(function() {
+            console.log("🔄 Reconnecting WebSocket...");
+            socket = new WebSocket(wsUrl);
+            setupSocketHandlers(socket);
+            fallbackAttempted = false; // Reset fallback for new connection
+        }, 1000);
+    }
     
     // Setup initial handlers
     setupSocketHandlers(socket);
@@ -114,6 +163,33 @@ $(document).ready(function () {
             setupSocketHandlers(socket);
         }
     };
+    
+    // Reconnect when page becomes visible (user switches back to tab)
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            // Page became visible - check if connection is alive
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                console.log("👁️ Page visible - reconnecting WebSocket...");
+                reconnectWebSocket();
+            }
+        }
+    });
+    
+    // Reconnect when window gains focus (user clicks on tab/window)
+    window.addEventListener('focus', function() {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            console.log("🎯 Window focused - reconnecting WebSocket...");
+            reconnectWebSocket();
+        }
+    });
+    
+    // Reconnect when page loads (already happens, but ensure it)
+    window.addEventListener('load', function() {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            console.log("📄 Page loaded - ensuring WebSocket connection...");
+            reconnectWebSocket();
+        }
+    });
     
     let cryptoPrices = {}; 
     let currentPrice = 0; 
